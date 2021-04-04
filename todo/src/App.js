@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { Component } from "react";
+import styled from "styled-components";
+import Home from "./components/Home/Home";
+import Navbar from "./components/Navbar/Navbar";
+import Sidebar from "./components/SideBar/Sidebar";
+import Backdrop from "./components/Backdrop/Backdrop";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    openSideBar: false,
+    openBackDrop: false,
+  };
+  clickToggleHandler = () => {
+    const currentStatu = this.state.openSideBar;
+    const currenStatauTolbar = this.state.openSideBar;
+    this.setState({ openSideBar: !currentStatu  , openBackDrop : !currenStatauTolbar});
+  };
+
+  hideBackDrop = () => {
+    this.setState({ openBackDrop: false });
+  };
+  render() {
+    return (
+      <Container>
+        <Backdrop show={this.state.openBackDrop} click={this.clickToggleHandler}/>
+        <Navbar clickToggle={this.clickToggleHandler} />
+        <Sidebar open={this.state.openSideBar} />
+        <Home />
+      </Container>
+    );
+  }
 }
 
 export default App;
+
+const Container = styled.div``;
