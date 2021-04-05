@@ -5,7 +5,7 @@ import ImageIcon from "@material-ui/icons/Image";
 
 const SimpleCard = (props) => {
   return (
-    <Holder style={{ backgroundColor: props.color }}>
+    <Holder onClick={props.click} style={{ backgroundColor: props.color }}>
       <Heading>Create notes here ...</Heading>
       <InnerHolder>
         <CheckBoxIcon style={{ marginRight: 12 }} />

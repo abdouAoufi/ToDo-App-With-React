@@ -7,32 +7,32 @@ import Headroom from "react-headroom";
 
 const Navbar = ({ clickToggle }) => {
   return (
-      <Container>
-        <InnerContainer>
-          <div>
-            <Element href="">
-              <Logo src={menu} onClick={clickToggle} />
-            </Element>
-            <Link href="/">
-              <Logo src={logo} />
-            </Link>
-          </div>
-          <SearchContainer>
-            <SearchInpuBar
-              type="text"
-              placeholder="Search for notes to-do's ..."
-            />
-            <IconHolder>
-              <SearchIcon />
-            </IconHolder>
-          </SearchContainer>
-          <LinkHolder>
-            <Link href="/">Get started</Link>
-            <Link href="/"> features</Link>
-            <Link href="/">More</Link>
-          </LinkHolder>
-        </InnerContainer>
-      </Container>
+    <Container>
+      <InnerContainer>
+        <div>
+          <Element href="">
+            <Logo src={menu} onClick={clickToggle} />
+          </Element>
+          <Link href="/">
+            <Logo src={logo} />
+          </Link>
+        </div>
+        <SearchContainer>
+          <SearchInpuBar
+            type="text"
+            placeholder="Search for notes to-do's ..."
+          />
+          <IconHolder>
+            <SearchIcon />
+          </IconHolder>
+        </SearchContainer>
+        <LinkHolder>
+          <Link href="/">Get started</Link>
+          <Link href="/"> features</Link>
+          <Link href="/">More</Link>
+        </LinkHolder>
+      </InnerContainer>
+    </Container>
   );
 };
 
@@ -41,17 +41,18 @@ export default Navbar;
 const Container = styled.nav`
   width: 100%;
   height: 50px;
-  position : fixed;
-  background-color : white;
-  right : 0 ;
-  left : 0; 
-  top : 0 ;
+  position: fixed;
+  background-color: white;
+  right: 0;
+  left: 0;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   place-items: center;
-  border-bottom: 1.5px solid #c4c4c4;
+  // border-bottom: 1.5px solid #c4c4c4;
   z-index: 500;
+  box-shadow: 0px 5px 44px 2px rgba(0,0,0,0.117);
 `;
 
 const InnerContainer = styled.div`
@@ -71,7 +72,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   width: 400px;
-  height: 30px;
+  height: 35px;
   background-color: #e2f3f5;
 `;
 

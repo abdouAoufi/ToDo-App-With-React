@@ -11,19 +11,28 @@ class App extends Component {
     openSideBar: false,
     openBackDrop: false,
   };
+
   clickToggleHandler = () => {
     const currentStatu = this.state.openSideBar;
     const currenStatauTolbar = this.state.openSideBar;
-    this.setState({ openSideBar: !currentStatu  , openBackDrop : !currenStatauTolbar});
+    this.setState({
+      openSideBar: !currentStatu,
+      openBackDrop: !currenStatauTolbar,
+    });
   };
 
   hideBackDrop = () => {
     this.setState({ openBackDrop: false });
   };
+
+ 
   render() {
     return (
       <Container>
-        <Backdrop show={this.state.openBackDrop} click={this.clickToggleHandler}/>
+        <Backdrop
+          show={this.state.openBackDrop}
+          click={this.clickToggleHandler}
+        />
         <Navbar clickToggle={this.clickToggleHandler} />
         <Sidebar open={this.state.openSideBar} />
         <Home />
