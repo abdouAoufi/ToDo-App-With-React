@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const SimpleCard = ({ title, content, color }) => {
+const SimpleCard = ({ title, content, color, date, click }) => {
   return (
-    <Container style={{ backgroundColor: color }}>
+    <Container style={{ backgroundColor: color }} onClick={click}>
       <InnerContainer>
         <ParentTop>
           <Title>{title}</Title>
@@ -12,7 +12,7 @@ const SimpleCard = ({ title, content, color }) => {
           <Content>{content}</Content>
         </ParentMiddle>
         <ParentBottom>
-          <DateInfo>23-03-2021 23:45</DateInfo>
+          <DateInfo>{date}</DateInfo>
         </ParentBottom>
       </InnerContainer>
     </Container>
@@ -29,7 +29,6 @@ const Container = styled.div`
   over-flow: hidden;
   min-width: 250px;
   min-height: 170px;
-
   border: none;
   display: grid;
   place-items: center;
@@ -37,10 +36,12 @@ const Container = styled.div`
   padding-right: 4px;
   padding-left: 4px;
   border-radius: 4px;
+  cursor : pointer;
 `;
 const InnerContainer = styled.div`
+
   min-height: 140px;
-  min-width : 100%;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -69,7 +70,7 @@ const Content = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 5;  
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   flex: 0.7;
 `;

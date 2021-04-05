@@ -10,11 +10,28 @@ export default class CreateNotePage extends Component {
   state = {
     TITLE: "",
     BODY: "",
+    DATE: null,
   };
 
   componentDidMount() {
-    // this.getRandomData();
   }
+
+  getFullTime = () => {
+    this.currentDate = new Date();
+    let cDay = this.checkLength(this.currentDate.getDate());
+    let cMonth = this.checkLength(this.currentDate.getMonth() + 1);
+    let cYear = this.currentDate.getFullYear();
+    let time =
+      this.checkLength(this.currentDate.getHours()) +
+      ":" +
+      this.checkLength(this.currentDate.getMinutes());
+    const fullTime = cDay + "-" + cMonth + "-" + cYear + " " + time;
+    return fullTime;
+  };
+
+  checkLength = (number) => {
+    return number < 10 ? "0" + number : number;
+  };
 
   TitleValue = "";
   BodyValue = "";
@@ -44,8 +61,9 @@ export default class CreateNotePage extends Component {
       });
   };
   clickDone = (e) => {
+    const date = this.getFullTime();
     e.preventDefault();
-    const info = { title: this.state.TITLE, body: this.state.BODY };
+    const info = { title: this.state.TITLE, body: this.state.BODY, date: date };
     this.props.clickDone(info);
     this.setState({ TITLE: "", BODY: "" });
   };

@@ -5,36 +5,41 @@ import Note from "./SingleNote/SingleNote";
 import Backdrop from "../Backdrop/Backdrop";
 import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import axios from "axios";
+import Loading from "../../components/Loading/Loading";
+import Error from "../Error/Error"
 
 class home extends Component {
   state = {
     showBackdrop: false,
     showCreateNote: false,
     notesList: [],
+    loading: true,
+    error: false,
   };
 
   componentDidMount() {
-    this.getDataFromServer();
+    this.getDataFromServer(12);
   }
 
-  getDataFromServer = () => {
+  getDataFromServer = (amount) => {
     axios
       .request("https://jsonplaceholder.typicode.com/comments/")
       .then((response) => {
-        const listBE = response.data.splice(0, 2);
+        const listBE = response.data.splice(0, amount);
         let data = [];
         listBE.forEach((item) => {
           const singleItem = {
             id: item.id,
             title: item.name,
             body: item.body,
+            date: "fake data ",
           };
           data.push(singleItem);
         });
-        this.setState({ notesList: data });
+        this.setState({ notesList: data, loading: false });
       })
-      .catch((erro) => {
-        console.log(erro);
+      .catch((error) => {
+        this.setState({ error: true });
       });
   };
 
@@ -59,47 +64,66 @@ class home extends Component {
     this.openCreatePageHandler();
   };
 
-  saveNotes = (info) => {
+  saveNotes = ({title , body , date}) => {
     const currentData = this.state.notesList;
     const id = this.state.notesList.length + 1;
     const singleItem = {
       id: id,
-      title: info.title,
-      body: info.body,
+      title: title,
+      body: body,
+      date: date,
     };
     currentData.splice(0, 0, singleItem);
     this.setState({ notesList: currentData });
-    console.log("Current state ", singleItem);
   };
+
+  clickedNoteHandler = (note) => {
+    // console.log
+    console.log(note)
+  }
 
   notes = () =>
     this.state.notesList.map((note) => (
       <Note
+        click={() => {this.clickedNoteHandler(note)}}
         color={this.getRandomColor()}
         title={note.title.slice(0, 20)}
         content={note.body}
+        date={note.date}
       />
     ));
   render() {
     return (
       <Container>
-        <Backdrop
-          show={this.state.showBackdrop}
-          click={this.openCreatePageHandler}
-        >
-          <CreateNotePage
-          
-            clickDone={this.clickDone}
-            clickCancel={this.clickCancel}
-            getTitle={this.getTitle}
-          />
-        </Backdrop>
-        <CreateNoteHolder>
-          <CreateNote color={"#e2f3f5"} click={this.openCreatePageHandler} />
-        </CreateNoteHolder>
-        <InnerContainer>
-          <Inside>{this.notes()}</Inside>
-        </InnerContainer>
+        {this.state.loading ? (
+          !this.state.error ? (
+            <Loading style={{ textAlign: "center", "margin-top": "15rem" }} />
+          ) : (
+            <Error />
+          )
+        ) : (
+          <div>
+            <Backdrop
+              show={this.state.showBackdrop}
+              click={this.openCreatePageHandler}
+            >
+              <CreateNotePage
+                clickDone={this.clickDone}
+                clickCancel={this.clickCancel}
+                getTitle={this.getTitle}
+              />
+            </Backdrop>
+            <CreateNoteHolder>
+              <CreateNote
+                color={"#e2f3f5"}
+                click={this.openCreatePageHandler}
+              />
+            </CreateNoteHolder>
+            <InnerContainer>
+              <Inside>{this.notes()}</Inside>
+            </InnerContainer>
+          </div>
+        )}
       </Container>
     );
   }
@@ -110,10 +134,14 @@ export default home;
 const Container = styled.div`
   margin-top: 80px;
   width: 100%;
+  display: grid;
+  place-items: center;
+  align-items: center;
 `;
 
 const InnerContainer = styled.div`
   display: flex;
+  width: 100%;
   justify-content: center;
   padding: 1rem;
 `;
