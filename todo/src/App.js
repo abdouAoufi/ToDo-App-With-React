@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/SideBar/Sidebar";
 import Backdrop from "./components/Backdrop/Backdrop";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 class App extends Component {
   state = {
@@ -25,18 +26,23 @@ class App extends Component {
     this.setState({ openBackDrop: false });
   };
 
- 
   render() {
     return (
-      <Container>
-        <Backdrop
-          show={this.state.openBackDrop}
-          click={this.clickToggleHandler}
-        />
-        <Navbar clickToggle={this.clickToggleHandler} />
-        <Sidebar open={this.state.openSideBar} />
-        <Home />
-      </Container>
+      <Router>
+        <Container>
+          <Backdrop
+            show={this.state.openBackDrop}
+            click={this.clickToggleHandler}
+          />
+          <Navbar clickToggle={this.clickToggleHandler} />
+          <Sidebar open={this.state.openSideBar} />
+          <Switch>
+            <Route path="/home">
+              <Home />
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
     );
   }
 }

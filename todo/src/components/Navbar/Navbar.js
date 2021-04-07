@@ -4,35 +4,38 @@ import logo from "../../assets/logo.png";
 import menu from "../../assets/menu.png";
 import SearchIcon from "@material-ui/icons/Search";
 import Headroom from "react-headroom";
+import { Link as RouterLink } from "react-router-dom";
 
 const Navbar = ({ clickToggle }) => {
   return (
-    <Container>
-      <InnerContainer>
-        <div>
-          <Element href="">
-            <Logo src={menu} onClick={clickToggle} />
-          </Element>
-          <Link href="/">
-            <Logo src={logo} />
-          </Link>
-        </div>
-        <SearchContainer>
-          <SearchInpuBar
-            type="text"
-            placeholder="Search for notes to-do's ..."
-          />
-          <IconHolder>
-            <SearchIcon />
-          </IconHolder>
-        </SearchContainer>
-        <LinkHolder>
-          <Link href="/">Get started</Link>
-          <Link href="/"> features</Link>
-          <Link href="/">More</Link>
-        </LinkHolder>
-      </InnerContainer>
-    </Container>
+    <header>
+      <Container>
+        <InnerContainer>
+          <div>
+            <Element href="">
+              <Logo src={menu} onClick={clickToggle} />
+            </Element>
+            <RouterLink to="/home">
+              <Logo src={logo} />
+            </RouterLink>
+          </div>
+          <SearchContainer>
+            <SearchInpuBar
+              type="text"
+              placeholder="Search for notes to-do's ..."
+            />
+            <IconHolder>
+              <SearchIcon />
+            </IconHolder>
+          </SearchContainer>
+          <LinkHolder>
+            <Link href="/">Get started</Link>
+            <Link href="/"> features</Link>
+            <Link href="/">More</Link>
+          </LinkHolder>
+        </InnerContainer>
+      </Container>
+    </header>
   );
 };
 
@@ -52,7 +55,7 @@ const Container = styled.nav`
   place-items: center;
   // border-bottom: 1.5px solid #c4c4c4;
   z-index: 500;
-  box-shadow: 0px 5px 44px 2px rgba(0,0,0,0.117);
+  box-shadow: 0px 5px 44px 2px rgba(0, 0, 0, 0.117);
 `;
 
 const InnerContainer = styled.div`
@@ -71,7 +74,7 @@ const Logo = styled.img`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 400px;
+  width: 450px;
   height: 35px;
   background-color: #e2f3f5;
 `;

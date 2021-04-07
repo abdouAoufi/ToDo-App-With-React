@@ -36,10 +36,9 @@ const Container = styled.div`
   padding-right: 4px;
   padding-left: 4px;
   border-radius: 4px;
-  cursor : pointer;
+  cursor: pointer;
 `;
 const InnerContainer = styled.div`
-
   min-height: 140px;
   min-width: 100%;
   display: flex;

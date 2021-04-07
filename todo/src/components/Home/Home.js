@@ -6,7 +6,7 @@ import Backdrop from "../Backdrop/Backdrop";
 import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import axios from "axios";
 import Loading from "../../components/Loading/Loading";
-import Error from "../Error/Error"
+import Error from "../Error/Error";
 
 class home extends Component {
   state = {
@@ -64,7 +64,7 @@ class home extends Component {
     this.openCreatePageHandler();
   };
 
-  saveNotes = ({title , body , date}) => {
+  saveNotes = ({ title, body, date }) => {
     const currentData = this.state.notesList;
     const id = this.state.notesList.length + 1;
     const singleItem = {
@@ -78,14 +78,15 @@ class home extends Component {
   };
 
   clickedNoteHandler = (note) => {
-    // console.log
-    console.log(note)
-  }
+    console.log(note);
+  };
 
   notes = () =>
     this.state.notesList.map((note) => (
       <Note
-        click={() => {this.clickedNoteHandler(note)}}
+        click={() => {
+          this.clickedNoteHandler(note);
+        }}
         color={this.getRandomColor()}
         title={note.title.slice(0, 20)}
         content={note.body}
@@ -102,7 +103,7 @@ class home extends Component {
             <Error />
           )
         ) : (
-          <div>
+          <OuterContainer>
             <Backdrop
               show={this.state.showBackdrop}
               click={this.openCreatePageHandler}
@@ -122,7 +123,7 @@ class home extends Component {
             <InnerContainer>
               <Inside>{this.notes()}</Inside>
             </InnerContainer>
-          </div>
+          </OuterContainer>
         )}
       </Container>
     );
@@ -138,7 +139,9 @@ const Container = styled.div`
   place-items: center;
   align-items: center;
 `;
-
+const OuterContainer = styled.div`
+  width: 100%;
+`;
 const InnerContainer = styled.div`
   display: flex;
   width: 100%;
