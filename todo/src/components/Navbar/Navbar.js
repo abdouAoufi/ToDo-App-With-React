@@ -3,7 +3,6 @@ import styled from "styled-components";
 import logo from "../../assets/logo.png";
 import menu from "../../assets/menu.png";
 import SearchIcon from "@material-ui/icons/Search";
-import Headroom from "react-headroom";
 import { Link as RouterLink } from "react-router-dom";
 
 const Navbar = ({ clickToggle }) => {
@@ -15,7 +14,7 @@ const Navbar = ({ clickToggle }) => {
             <Element href="">
               <Logo src={menu} onClick={clickToggle} />
             </Element>
-            <RouterLink to="/home">
+            <RouterLink to="/">
               <Logo src={logo} />
             </RouterLink>
           </div>
@@ -31,7 +30,7 @@ const Navbar = ({ clickToggle }) => {
           <LinkHolder>
             <Link href="/">Get started</Link>
             <Link href="/"> features</Link>
-            <Link href="/">More</Link>
+            <RouterLink to="/login">Log out</RouterLink>
           </LinkHolder>
         </InnerContainer>
       </Container>
@@ -45,6 +44,7 @@ const Container = styled.nav`
   width: 100%;
   height: 50px;
   position: fixed;
+  margin-bottom : 50px;
   background-color: white;
   right: 0;
   left: 0;
@@ -53,7 +53,6 @@ const Container = styled.nav`
   justify-content: center;
   align-items: center;
   place-items: center;
-  // border-bottom: 1.5px solid #c4c4c4;
   z-index: 500;
   box-shadow: 0px 5px 44px 2px rgba(0, 0, 0, 0.117);
 `;

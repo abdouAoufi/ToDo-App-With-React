@@ -7,6 +7,7 @@ import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import axios from "axios";
 import Loading from "../../components/Loading/Loading";
 import Error from "../Error/Error";
+import { Link } from "react-router-dom";
 
 class home extends Component {
   state = {
@@ -77,28 +78,31 @@ class home extends Component {
     this.setState({ notesList: currentData });
   };
 
-  clickedNoteHandler = (note) => {
-    console.log(note);
+  clickedNoteHandler = (id) => {
+    this.props.history.push({ pathname: "/note/" + id });
+    console.log(this.props);
   };
 
   notes = () =>
-    this.state.notesList.map((note) => (
-      <Note
-        click={() => {
-          this.clickedNoteHandler(note);
-        }}
-        color={this.getRandomColor()}
-        title={note.title.slice(0, 20)}
-        content={note.body}
-        date={note.date}
-      />
+    this.state.notesList.map((note, index) => (
+      // <Link to={"/note/" + note.id}>
+        <Note
+          click={() => {
+            this.clickedNoteHandler(note.id);
+          }}
+          color={this.getRandomColor()}
+          title={note.title.slice(0, 20)}
+          content={note.body}
+          date={note.date}
+        />
+      // </Link>
     ));
   render() {
     return (
       <Container>
         {this.state.loading ? (
           !this.state.error ? (
-            <Loading style={{ textAlign: "center", "margin-top": "15rem" }} />
+            <Loading />
           ) : (
             <Error />
           )

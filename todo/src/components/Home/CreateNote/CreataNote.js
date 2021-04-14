@@ -19,17 +19,18 @@ export default SimpleCard;
 
 const Holder = styled.div`
   cursor: pointer;
-  height: 40px;
+  height: auto;
   width: 430px;
   border-radius: 5px;
   box-shadow: 0px 0px 3px #c4c4c4;
   display: flex;
+  place-items : center;
   align-items: center;
-  padding: 0 16px;
+  padding: 12px 16px;
   justify-content: space-between;
 `;
 
-const Heading = styled.p`
+const Heading = styled.h5`
   font-size: 16px;
   font-weight: 400;
 `;

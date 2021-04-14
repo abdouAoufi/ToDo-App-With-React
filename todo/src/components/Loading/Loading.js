@@ -4,10 +4,7 @@ import './Loading.css'
 
 function Loading() {
   return (
-    <div>
-      <div className="progress">
-      </div>
-    </div>
+    <div class="lds-facebook"><div></div><div></div><div></div></div>
   );
 }
 
