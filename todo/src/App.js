@@ -13,7 +13,6 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login/Loginn";
 import NoteDisplayer from "./components/NoteDisplayer/NoteDisplayer";
-import Tailwindd from "./test/tailwind/Tailwindd";
 
 class App extends Component {
   state = {
@@ -43,28 +42,28 @@ class App extends Component {
 
   render() {
     return (
-      // <Router>
-      //   {this.state.login ? (
-      //     <Container>
-      //       <Backdrop
-      //         show={this.state.openBackDrop}
-      //         click={this.clickToggleHandler}
-      //       />
-      //       <Navbar clickToggle={this.clickToggleHandler} />
-      //       <Sidebar open={this.state.openSideBar} />
-      //       <Switch>
-      //         <Route exact path="/" component={Home} />
+      <Router>
+        {this.state.login ? (
+          <Container>
+            <Backdrop
+              show={this.state.openBackDrop}
+              click={this.clickToggleHandler}
+            />
+            <Navbar clickToggle={this.clickToggleHandler} />
+            <Sidebar open={this.state.openSideBar} />
+            <Switch>
+              <Route exact path="/" component={Home} />
 
-      //         <Route path="/login" component={Login}/>
+              <Route path="/login" component={Login}/>
 
-      //         <Route path="/note/:id" component={NoteDisplayer}/>
-      //       </Switch>
-      //     </Container>
-      //   ) : (
-      //     <Login click={this.loginClicked} />
-      //   )}
-      // </Router>
-      <Tailwindd />
+              <Route path="/note/:id" component={NoteDisplayer}/>
+            </Switch>
+          </Container>
+        ) : (
+          <Login click={this.loginClicked} />
+        )}
+      </Router>
+
     );
   }
 }
