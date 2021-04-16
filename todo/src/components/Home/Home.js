@@ -84,18 +84,16 @@ class home extends Component {
   };
 
   notes = () =>
-    this.state.notesList.map((note, index) => (
-      // <Link to={"/note/" + note.id}>
-        <Note
-          click={() => {
-            this.clickedNoteHandler(note.id);
-          }}
-          color={this.getRandomColor()}
-          title={note.title.slice(0, 20)}
-          content={note.body}
-          date={note.date}
-        />
-      // </Link>
+    this.state.notesList.map((note) => (
+      <Note
+        click={() => {
+          this.clickedNoteHandler(note.id);
+        }}
+        color={this.getRandomColor()}
+        title={note.title.slice(0, 20)}
+        content={note.body}
+        date={note.date}
+      />
     ));
   render() {
     return (
@@ -137,7 +135,7 @@ class home extends Component {
 export default home;
 
 const Container = styled.div`
-  margin-top: 80px;
+  margin-top: 32px;
   width: 100%;
   display: grid;
   place-items: center;
