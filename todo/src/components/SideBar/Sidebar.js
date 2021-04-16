@@ -30,7 +30,7 @@ const Container = styled.div`
   background-color :#e2f3f5;
   transition : transform 250ms ease ;
   position: fixed;
-  top: 50px;
+  top: 0;
   bottom: 0;
   left: 0;
   z-index :200;

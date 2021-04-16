@@ -1,14 +1,21 @@
-*{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-html{
+
+html {
   scroll-behavior: smooth;
 }
-a{
+
+a {
   text-decoration: none;
 }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -24,4 +31,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
