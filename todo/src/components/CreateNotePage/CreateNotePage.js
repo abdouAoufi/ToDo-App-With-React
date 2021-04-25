@@ -5,16 +5,18 @@ import TextField from "@material-ui/core/TextField";
 import pin from "../../assets/push-pin.png";
 import CancelButton from "@material-ui/core/Button";
 import axios from "axios";
+import { connect } from "react-redux";
+import { addNote } from "../../store/actions/index";
 
-export default class CreateNotePage extends Component {
+class CreateNotePage extends Component {
   state = {
     TITLE: "",
     BODY: "",
     DATE: null,
+    ID: null,
+    note: null,
+    display: true,
   };
-
-  componentDidMount() {
-  }
 
   getFullTime = () => {
     this.currentDate = new Date();
@@ -29,17 +31,39 @@ export default class CreateNotePage extends Component {
     return fullTime;
   };
 
+  componentDidMount() {
+    const id = this.props.targetNote;
+    if (this.props.targetNote) {
+      this.getDataFromServer(id);
+    } else {
+      this.setState({display : false})
+    }
+  }
+
+  getDataFromServer = (id) => {
+    axios
+      .request("https://jsonplaceholder.typicode.com/comments/" + id)
+      .then((response) => {
+        this.setState({
+          TITLE: response.data.name,
+          BODY: response.data.body,
+          display: true,
+        });
+      })
+      .catch((error) => {
+        // this.setState({ error: true });
+      });
+  };
+
   checkLength = (number) => {
     return number < 10 ? "0" + number : number;
   };
 
-  TitleValue = "";
-  BodyValue = "";
   getTitle = (event) => {
-    this.setState({ TITLE: event.target.value });
+    this.setState({ TITLE: event.target.value, display: false });
   };
   getBody = (event) => {
-    this.setState({ BODY: event.target.value });
+    this.setState({ BODY: event.target.value, display: false });
   };
 
   getRandomData = () => {
@@ -60,14 +84,23 @@ export default class CreateNotePage extends Component {
         console.log(erro);
       });
   };
+
   clickDone = (e) => {
     const date = this.getFullTime();
     e.preventDefault();
     const info = { title: this.state.TITLE, body: this.state.BODY, date: date };
-    this.props.clickDone(info);
+    this.props.addNote(info);
     this.setState({ TITLE: "", BODY: "" });
   };
   render() {
+    console.log(this.state.note);
+    this.title = (
+      <Title
+        value={this.state.TITLE}
+        placeholder="Title"
+        onChange={this.getTitle}
+      />
+    );
     return (
       <Container
         onClick={(e) => {
@@ -77,11 +110,7 @@ export default class CreateNotePage extends Component {
         <form>
           <InnerContainer>
             <TopParent>
-              <Title
-                value={this.state.TITLE}
-                placeholder="Title"
-                onChange={this.getTitle}
-              />
+              {this.title}
               <Fixed src={pin} />
             </TopParent>
             <MiddleParent>
@@ -97,7 +126,9 @@ export default class CreateNotePage extends Component {
                 onChange={this.getBody}
               />
             </MiddleParent>
-            <BottomParent>
+            <BottomParent
+              style={{ visibility: this.state.display ? "hidden" : "visible" }}
+            >
               <div>
                 <CancelButton
                   onClick={this.props.clickCancel}
@@ -130,12 +161,26 @@ export default class CreateNotePage extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    targetNote: state.clickedNote,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addNote: (note) => dispatch(addNote(note)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNotePage);
+
 const Container = styled.div`
   box-sizing: border-box;
   margin-top: 50px;
   z-index: 300;
   width: 450px;
-  height: 500px;
+  height: auto;
   background-color: white;
   border-radius: 3px;
   z-index: 200;
@@ -175,6 +220,5 @@ const MiddleParent = styled.div`
 const BottomParent = styled.div`
   margin-top: 16px;
   width: auto;
-  display: flex;
   justify-content: flex-end;
 `;

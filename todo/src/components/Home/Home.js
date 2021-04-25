@@ -7,19 +7,24 @@ import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import axios from "axios";
 import Loading from "../../components/Loading/Loading";
 import Error from "../Error/Error";
-import { Link } from "react-router-dom";
+import {connect} from "react-redux"
+import {setTargetNote} from '../../store/actions/index'
+import * as actions from "../../store/actions/actionTypes"
 
 class home extends Component {
   state = {
-    showBackdrop: false,
+    showBackdrop: true,
     showCreateNote: false,
     notesList: [],
     loading: true,
     error: false,
+    targetNote : null,
+    create: false,
+    style : null
   };
 
   componentDidMount() {
-    this.getDataFromServer(12);
+    this.getDataFromServer(3);
   }
 
   getDataFromServer = (amount) => {
@@ -52,35 +57,18 @@ class home extends Component {
   };
 
   openCreatePageHandler = () => {
-    const pageStatu = this.state.showBackdrop;
-    this.setState({ showBackdrop: !pageStatu });
+    this.props.history.push("/note")
+    this.props.noteClicked(null)
   };
 
-  clickDone = (result) => {
-    this.saveNotes(result);
-    this.openCreatePageHandler();
-  };
 
-  clickCancel = () => {
-    this.openCreatePageHandler();
-  };
 
-  saveNotes = ({ title, body, date }) => {
-    const currentData = this.state.notesList;
-    const id = this.state.notesList.length + 1;
-    const singleItem = {
-      id: id,
-      title: title,
-      body: body,
-      date: date,
-    };
-    currentData.splice(0, 0, singleItem);
-    this.setState({ notesList: currentData });
-  };
+
+
 
   clickedNoteHandler = (id) => {
-    this.props.history.push({ pathname: "/note/" + id });
-    console.log(this.props);
+    this.props.noteClicked(id)
+    this.props.history.push("/note")
   };
 
   notes = () =>
@@ -89,7 +77,7 @@ class home extends Component {
         click={() => {
           this.clickedNoteHandler(note.id);
         }}
-        color={this.getRandomColor()}
+        color={"#EEEEEE"}
         title={note.title.slice(0, 20)}
         content={note.body}
         date={note.date}
@@ -106,17 +94,8 @@ class home extends Component {
           )
         ) : (
           <OuterContainer>
-            <Backdrop
-              show={this.state.showBackdrop}
-              click={this.openCreatePageHandler}
-            >
-              <CreateNotePage
-                clickDone={this.clickDone}
-                clickCancel={this.clickCancel}
-                getTitle={this.getTitle}
-              />
-            </Backdrop>
-            <CreateNoteHolder>
+       
+             <CreateNoteHolder>
               <CreateNote
                 color={"#e2f3f5"}
                 click={this.openCreatePageHandler}
@@ -124,7 +103,7 @@ class home extends Component {
             </CreateNoteHolder>
             <InnerContainer>
               <Inside>{this.notes()}</Inside>
-            </InnerContainer>
+            </InnerContainer> 
           </OuterContainer>
         )}
       </Container>
@@ -132,7 +111,25 @@ class home extends Component {
   }
 }
 
-export default home;
+const mapStateToProps = state => {
+  return {
+    test : state.test ,
+    targetNote : state.targetNote,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    noteClicked : (id) => dispatch(setTargetNote(id)) ,
+  }
+}
+
+export default connect(mapStateToProps , mapDispatchToProps )(home);
+
+
+
+
+
 
 const Container = styled.div`
   margin-top: 32px;

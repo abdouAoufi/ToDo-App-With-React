@@ -5,14 +5,15 @@ import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/SideBar/Sidebar";
 import Backdrop from "./components/Backdrop/Backdrop";
+import CreateNote from "./components/CreateNotePage/CreateNotePage"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
 } from "react-router-dom";
 import Login from "./components/Login/Loginn";
 import NoteDisplayer from "./components/NoteDisplayer/NoteDisplayer";
+
 
 class App extends Component {
   state = {
@@ -53,10 +54,8 @@ class App extends Component {
             <Sidebar open={this.state.openSideBar} />
             <Switch>
               <Route exact path="/" component={Home} />
-
+              <Route  path="/note" component={NoteDisplayer} />
               <Route path="/login" component={Login}/>
-
-              <Route path="/note/:id" component={NoteDisplayer}/>
             </Switch>
           </Container>
         ) : (

@@ -1,38 +1,72 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Loading from "../Loading/Loading";
-import './NoteDisplayer.css'
-export default class NoteDisplayer extends Component {
+import "./NoteDisplayer.css";
+import Backdrop from "../Backdrop/Backdrop";
+import CreateNotePage from "../CreateNotePage/CreateNotePage";
+import { connect } from "react-redux";
+class NoteDisplayer extends Component {
   state = {
     title: "",
     body: "",
-    getData : false ,
-  };
-  getSingleNote = (id) => {
-    axios
-      .request("https://jsonplaceholder.typicode.com/comments/" + id)
-      .then((response) => {
-        this.setState({ getData : true ,title: response.data.name, body: response.data.body });
-      });
+    getData: false,
+    showBackdrop: true,
+    note : null
   };
 
-  componentDidMount() {
-    this.getSingleNote(this.props.match.params.id);
+  // componentDidMount() {
+  //   const id = this.props.targetNote;
+  //   if (this.props.targetNote) {
+  //     this.getDataFromServer(id);
+  //   } else {
+  //     console.log("We dont have id here ");
+  //   }
+  // }
+
+  // getDataFromServer = (id) => {
+  //   axios
+  //     .request("https://jsonplaceholder.typicode.com/comments/" + id)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       this.setState({note : response.data})
+  //     })
+  //     .catch((error) => {
+  //       // this.setState({ error: true });
+  //     });
+  // };
+
+  onClickBackDrop = () => {
+    this.props.history.replace("/");
   }
+
   render() {
-    console.log(this.state);
+    console.log(this.props.targetNote);
+    let notePage = null;
+    notePage = (
+      <CreateNotePage
+      // style={this.state.style}
+      // create={this.state.create}
+      note={this.state.note}
+      // clickDone={this.clickDone}
+      clickCancel={this.onClickBackDrop}
+      // getTitle={this.getTitle}
+      />
+    );
     return (
-      <div className="noteContainer">
-        {this.state.getData ? (
-          <div className="noteContainer">
-            {" "}
-            <h1>{this.state.title}</h1>
-            <p>{this.state.body}</p>
-          </div>
-        ) : (
-          <Loading />
-        )}
-      </div>
+      <Backdrop
+        show={this.state.showBackdrop}
+        click={this.onClickBackDrop}
+      >
+        {notePage}
+      </Backdrop>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    targetNote: state.clickedNote,
+  };
+};
+
+export default connect(mapStateToProps)(NoteDisplayer);

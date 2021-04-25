@@ -6,9 +6,11 @@ import reminder from "../../assets/reminder.png";
 import tag from "../../assets/tag.png";
 import todo from "../../assets/to-do-list.png";
 import trash from '../../assets/rubbish-bin.png'
+import logo from "../../assets/logo.png"
 
 const Sidebar = (props) => {
   const options = [
+    { name : "" , icon: logo },
     { name: "note", icon: note },
     { name: "reminder", icon: reminder },
     { name: "tag", icon: tag },
