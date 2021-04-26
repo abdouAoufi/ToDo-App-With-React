@@ -40,14 +40,13 @@ class NoteDisplayer extends Component {
   }
 
   render() {
-    console.log(this.props.targetNote);
     let notePage = null;
     notePage = (
       <CreateNotePage
       // style={this.state.style}
       // create={this.state.create}
       note={this.state.note}
-      // clickDone={this.clickDone}
+      history={this.props.history}
       clickCancel={this.onClickBackDrop}
       // getTitle={this.getTitle}
       />

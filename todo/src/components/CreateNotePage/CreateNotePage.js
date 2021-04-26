@@ -6,7 +6,6 @@ import pin from "../../assets/push-pin.png";
 import CancelButton from "@material-ui/core/Button";
 import axios from "axios";
 import { connect } from "react-redux";
-import { addNote } from "../../store/actions/index";
 
 class CreateNotePage extends Component {
   state = {
@@ -15,7 +14,7 @@ class CreateNotePage extends Component {
     DATE: null,
     ID: null,
     note: null,
-    display: true,
+    display: false,
   };
 
   getFullTime = () => {
@@ -32,38 +31,26 @@ class CreateNotePage extends Component {
   };
 
   componentDidMount() {
-    const id = this.props.targetNote;
     if (this.props.targetNote) {
-      this.getDataFromServer(id);
+      this.setState({
+        TITLE: this.props.targetNote.data.title,
+        BODY: this.props.targetNote.data.body,
+        display: true,
+      });
     } else {
-      this.setState({display : false})
+      console.log("that means create ");
     }
   }
-
-  getDataFromServer = (id) => {
-    axios
-      .request("https://jsonplaceholder.typicode.com/comments/" + id)
-      .then((response) => {
-        this.setState({
-          TITLE: response.data.name,
-          BODY: response.data.body,
-          display: true,
-        });
-      })
-      .catch((error) => {
-        // this.setState({ error: true });
-      });
-  };
 
   checkLength = (number) => {
     return number < 10 ? "0" + number : number;
   };
 
   getTitle = (event) => {
-    this.setState({ TITLE: event.target.value, display: false });
+    this.setState({ TITLE: event.target.value});
   };
   getBody = (event) => {
-    this.setState({ BODY: event.target.value, display: false });
+    this.setState({ BODY: event.target.value });
   };
 
   getRandomData = () => {
@@ -76,8 +63,10 @@ class CreateNotePage extends Component {
           const singleItem = {
             TITLE: item.name,
             BODY: item.body,
+            date : this.getFullTime(),
           };
           this.setState(singleItem);
+          // this.postNoteToServer(singleItem)
         });
       })
       .catch((erro) => {
@@ -88,12 +77,28 @@ class CreateNotePage extends Component {
   clickDone = (e) => {
     const date = this.getFullTime();
     e.preventDefault();
-    const info = { title: this.state.TITLE, body: this.state.BODY, date: date };
-    this.props.addNote(info);
+    const info = {
+      title: this.state.TITLE,
+      body: this.state.BODY,
+      date: date,
+    };
+    this.postNoteToServer(info);
     this.setState({ TITLE: "", BODY: "" });
+    this.props.history.replace("/");
   };
+
+  postNoteToServer = (note) => {
+    axios
+      .post("https://todo-1ecae-default-rtdb.firebaseio.com/notes.json", note)
+      .then((response) => {
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   render() {
-    console.log(this.state.note);
     this.title = (
       <Title
         value={this.state.TITLE}
@@ -122,7 +127,7 @@ class CreateNotePage extends Component {
                 type="text"
                 value={this.state.BODY}
                 rows={16}
-                labelWidth={30}
+                // labelWidth={30}
                 onChange={this.getBody}
               />
             </MiddleParent>
@@ -167,13 +172,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addNote: (note) => dispatch(addNote(note)),
-  };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateNotePage);
+export default connect(mapStateToProps)(CreateNotePage);
 
 const Container = styled.div`
   box-sizing: border-box;
