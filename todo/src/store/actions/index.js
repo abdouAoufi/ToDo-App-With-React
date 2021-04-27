@@ -1,1 +1,1 @@
-export {setTargetNote  ,getNotes} from './noteActions'
+export {setTargetNote  ,getNotes , addNote} from './noteActions'

@@ -23,8 +23,6 @@ class App extends Component {
   };
 
   loginClicked = () => {
-    // console.log("Login Cliked ")
-    const login = this.state.login;
     this.setState({ login: true });
   };
 

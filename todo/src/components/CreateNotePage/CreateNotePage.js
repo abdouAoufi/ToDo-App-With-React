@@ -6,6 +6,8 @@ import pin from "../../assets/push-pin.png";
 import CancelButton from "@material-ui/core/Button";
 import axios from "axios";
 import { connect } from "react-redux";
+import * as actions from "../../store/actions/index";
+import Loading from "../Loading/Loading";
 
 class CreateNotePage extends Component {
   state = {
@@ -15,6 +17,7 @@ class CreateNotePage extends Component {
     ID: null,
     note: null,
     display: false,
+    saveNote: false,
   };
 
   getFullTime = () => {
@@ -47,7 +50,7 @@ class CreateNotePage extends Component {
   };
 
   getTitle = (event) => {
-    this.setState({ TITLE: event.target.value});
+    this.setState({ TITLE: event.target.value });
   };
   getBody = (event) => {
     this.setState({ BODY: event.target.value });
@@ -63,10 +66,9 @@ class CreateNotePage extends Component {
           const singleItem = {
             TITLE: item.name,
             BODY: item.body,
-            date : this.getFullTime(),
+            date: this.getFullTime(),
           };
           this.setState(singleItem);
-          // this.postNoteToServer(singleItem)
         });
       })
       .catch((erro) => {
@@ -82,17 +84,14 @@ class CreateNotePage extends Component {
       body: this.state.BODY,
       date: date,
     };
-    this.postNoteToServer(info);
-    this.setState({ TITLE: "", BODY: "" });
-    this.props.history.replace("/");
+    this.props.onAddNote(info);
+    this.setState({ TITLE: "", BODY: "", saveNote: true });
   };
 
   postNoteToServer = (note) => {
     axios
       .post("https://todo-1ecae-default-rtdb.firebaseio.com/notes.json", note)
-      .then((response) => {
-
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error);
       });
@@ -106,61 +105,71 @@ class CreateNotePage extends Component {
         onChange={this.getTitle}
       />
     );
+    let loading = null;
+    let content = (
+      <InnerContainer>
+        <TopParent>
+          {this.title}
+          <Fixed src={pin} />
+        </TopParent>
+        <MiddleParent>
+          <TextField
+            style={{ width: "100%", fontSize: "1rem", border: "none" }}
+            id="standard-multiline-static"
+            label="Write your note here "
+            multiline
+            type="text"
+            value={this.state.BODY}
+            rows={16}
+            onChange={this.getBody}
+          />
+        </MiddleParent>
+        <BottomParent
+          style={{ display: !this.state.display ? "flex" : "none" }}
+        >
+          <div>
+            <CancelButton
+              onClick={this.props.clickCancel}
+              style={{ marginRight: "16px" }}
+              variant="contained"
+            >
+              Cancel
+            </CancelButton>
+
+            <CancelButton
+              onClick={this.getRandomData}
+              style={{ marginRight: "16px" }}
+              variant="contained"
+            >
+              Random
+            </CancelButton>
+
+            <Button
+              click={this.clickDone}
+              name="done"
+              type="contained"
+              color="primary"
+            />
+          </div>
+        </BottomParent>
+      </InnerContainer>
+    );
+    if (this.props.loading && this.state.saveNote) {
+      loading = <Loading />;
+      content = null ;
+    } else if (this.state.saveNote){
+      loading = null;
+      this.props.history.push("/")
+    }
+
     return (
       <Container
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <form>
-          <InnerContainer>
-            <TopParent>
-              {this.title}
-              <Fixed src={pin} />
-            </TopParent>
-            <MiddleParent>
-              <TextField
-                style={{ width: "100%", fontSize: "1rem", border: "none" }}
-                id="standard-multiline-static"
-                label="Write your note here "
-                multiline
-                type="text"
-                value={this.state.BODY}
-                rows={16}
-                // labelWidth={30}
-                onChange={this.getBody}
-              />
-            </MiddleParent>
-            <BottomParent
-              style={{ visibility: this.state.display ? "hidden" : "visible" }}
-            >
-              <div>
-                <CancelButton
-                  onClick={this.props.clickCancel}
-                  style={{ marginRight: "16px" }}
-                  variant="contained"
-                >
-                  Cancel
-                </CancelButton>
-
-                <CancelButton
-                  onClick={this.getRandomData}
-                  style={{ marginRight: "16px" }}
-                  variant="contained"
-                >
-                  Random
-                </CancelButton>
-
-                <Button
-                  click={this.clickDone}
-                  name="done"
-                  type="contained"
-                  color="primary"
-                />
-              </div>
-            </BottomParent>
-          </InnerContainer>
-        </form>
+        {loading}
+        {content}
       </Container>
     );
   }
@@ -169,26 +178,36 @@ class CreateNotePage extends Component {
 const mapStateToProps = (state) => {
   return {
     targetNote: state.clickedNote,
+    loading: state.loading,
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddNote: (note) => dispatch(actions.addNote(note)),
+  };
+};
 
-export default connect(mapStateToProps)(CreateNotePage);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNotePage);
 
 const Container = styled.div`
   box-sizing: border-box;
   margin-top: 50px;
   z-index: 300;
-  width: 450px;
+  width: auto;
   height: auto;
+  padding : 1rem ;
   background-color: white;
   border-radius: 3px;
   z-index: 200;
+  display : grid ;
+  place-items : center;
 `;
 
 const InnerContainer = styled.div`
   margin: 25px;
   height: 90%;
+  width : 430px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

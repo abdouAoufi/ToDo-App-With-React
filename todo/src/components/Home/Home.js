@@ -10,21 +10,18 @@ import { setTargetNote, getNotes } from "../../store/actions/index";
 
 class home extends Component {
   state = {
-    getData : false , 
-    list : [],
-    loading : true ,
+    getData: false,
+    list: [],
+    loading: true,
   };
 
   componentDidMount() {
-    this.props.getNotes(3);
+    this.props.getNotes();
   }
-
-
 
   static getDerivedStateFromProps(props, state) {
-    return {list: props.listOfNotes , loading : false};
+    return { list: props.listOfNotes, loading: false };
   }
-
 
   colors = ["#f4fa9c", "#f4fa9c", "#facf5a"];
 
@@ -43,59 +40,68 @@ class home extends Component {
     this.props.history.push("/note");
   };
 
- 
-
-
   render() {
     let singleNote = null;
-    if (this.props.listOfNotes) {
-
-      singleNote = this.state.list.map((note) => {
-        return (
-          <Note
-            click={() => {
-              this.clickedNoteHandler(note.id);
-            }}
-            key={note.id}
-            color={this.getRandomColor()}
-            title={note.data.title.slice(0, 20)}
-            content={note.data.body}
-            date={note.data.date}
-          />
+    let info = null;
+    let loading = <Loading style={{ margin: "auto" }} />;
+    if (!this.props.loading) {
+      loading = null;
+      if (this.state.list.length > 0) {
+        singleNote = this.state.list.reverse().map((note) => {
+          return (
+            <Note
+              click={() => {
+                this.clickedNoteHandler(note.id);
+              }}
+              key={note.id}
+              color={this.getRandomColor()}
+              title={note.data.title.slice(0, 20)}
+              content={note.data.body}
+              date={note.data.date}
+            />
+          );
+        });
+      } else {
+        loading = (
+          <h2 style={{ color: "salmon" }}>Please start adding some notes !</h2>
         );
-      });
+      }
+      info = (
+        <OuterContainer>
+          <CreateNoteHolder>
+            <CreateNote color={"#e2f3f5"} click={this.openCreatePageHandler} />
+          </CreateNoteHolder>
+          <InnerContainer>
+            <Inside>{singleNote}</Inside>
+          </InnerContainer>
+        </OuterContainer>
+      );
+    }
+    if (this.props.error) {
+      loading = <h3 style={{ color: "red" }}>{this.props.error.message}</h3>;
     }
 
     return (
       <Container>
-          <OuterContainer>
-            <CreateNoteHolder>
-              <CreateNote
-                color={"#e2f3f5"}
-                click={this.openCreatePageHandler}
-              />
-            </CreateNoteHolder>
-            <InnerContainer>
-              <Inside>{singleNote}</Inside>
-            </InnerContainer>
-          </OuterContainer>
+        {info}
+        {loading}
       </Container>
     );
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
-    test: state.test,
+    loading: state.loading,
     targetNote: state.targetNote,
     listOfNotes: state.notesList,
+    error: state.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getNotes: (amount) => dispatch(getNotes(amount)),
+    getNotes: () => dispatch(getNotes()),
     noteClicked: (id) => dispatch(setTargetNote(id)),
   };
 };
