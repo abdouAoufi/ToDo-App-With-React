@@ -1,7 +1,6 @@
 import { Redirect } from "react-router"
 import {connect} from "react-redux"
-import * as actions from "../../store/actions/index"
-
+import * as actions from "../../../store/actions/index"
 import React, { Component } from 'react';
 
 
