@@ -33,7 +33,10 @@ class Navbar extends React.Component {
             ) : null}
             <LinkHolder>
               {this.props.isAuth ? (
-                <RouterLink to="/logout">Log out</RouterLink>
+                <div style={{ display: "inline" }}>
+                  <RouterLink to="/profile">{this.props.profileName}</RouterLink>
+                  <RouterLink to="/logout">Log out</RouterLink>
+                </div>
               ) : (
                 <div style={{ display: "inline" }}>
                   <RouterLink to="/signup">Sign Up</RouterLink>
@@ -50,6 +53,7 @@ class Navbar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     isAuth: state.auth.isAuth,
+    profileName : state.auth.email
   };
 };
 
@@ -95,7 +99,7 @@ const SearchInpuBar = styled.input`
   padding-left: 8px;
   font-size: 1rem;
   outline: none;
-  border-radius : 3px;
+  border-radius: 3px;
   :selection {
     outline: none;
   }
@@ -106,7 +110,7 @@ const IconHolder = styled.div`
   display: grid;
   place-items: center;
   height: 100%;
-  cursor:pointer;
+  cursor: pointer;
   :hover {
     background-color: #c5e3f6;
   }

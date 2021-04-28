@@ -32,7 +32,7 @@ export const gettingNoteFail = (error) => {
     dispatch({ type: actions.ADDING_NOTE_FAIL, error: error });
 };
 export const getNotes = (userId) => {
-  // console.log(userId)
+  console.log(userId)
   return (dispatch) => {
     dispatch(startGettingNotes());
     const url =

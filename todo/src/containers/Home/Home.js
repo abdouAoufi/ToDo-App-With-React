@@ -14,28 +14,30 @@ class home extends Component {
     getData: false,
     list: [],
     loading: true,
+    email: null,
+    idToken: null,
+    userId: null,
+    expires: null,
   };
-
-  email = null;
-  idToken = null;
-  userId = null;
-  expires = null;
 
   componentDidMount() {
     this.checkLocalPath();
-    this.props.getNotes(this.props.userId);
+    if(this.props.isAuth){
+      this.props.getNotes(this.props.userId);
+    }
   }
 
   checkLocalPath = () => {
-    this.idToken = localStorage.getItem("idToken");
-    this.userId = localStorage.getItem("userId");
-    this.email = localStorage.getItem("email");
-    this.expires = localStorage.getItem("expires");
-    const timeValidity = new Date(this.expires);
-    if (this.idToken) {
+    if (localStorage.getItem("idToken")) {
+      const idToken = localStorage.getItem("idToken");
+      const userId = localStorage.getItem("userId");
+      const email = localStorage.getItem("email");
+      const expires = localStorage.getItem("expires");
+      this.setState({ idToken, userId, email, expires });
+      const timeValidity = new Date(expires);
       if (new Date() < timeValidity) {
-        this.props.onAuth(this.idToken, this.userId, this.email);
-     
+        this.props.onAuth(this.state.idToken, this.state.userId, this.state.email);
+        this.props.getNotes(this.state.userId);
       } else {
         this.props.onLogOut();
       }
@@ -64,44 +66,42 @@ class home extends Component {
   };
 
   render() {
-    console.log(this.props.userId);
+    console.log(this.props.listOfNotes);
     let singleNote = null;
     let info = null;
     let loading = <Loading style={{ margin: "auto" }} />;
-    if (!this.props.loading) {
+    // loading = null;
+    if (this.props.listOfNotes.length > 0) {
       loading = null;
-      if (this.props.listOfNotes.length > 0) {
-        loading = null ;
-        singleNote = this.props.listOfNotes.reverse().map((note) => {
-          return (
-            <Note
-              click={() => {
-                this.clickedNoteHandler(note.id);
-              }}
-              key={note.id}
-              color={"#feb062"}
-              title={note.data.title.slice(0, 20)}
-              content={note.data.body}
-              date={note.data.date}
-            />
-          );
-        });
-      } else {
-        loading = (
-          <h2 style={{ color: "salmon" }}>Please start adding some notes !</h2>
+      singleNote = this.props.listOfNotes.reverse().map((note) => {
+        return (
+          <Note
+            click={() => {
+              this.clickedNoteHandler(note.id);
+            }}
+            key={note.id}
+            color={"#feb062"}
+            title={note.data.title.slice(0, 20)}
+            content={note.data.body}
+            date={note.data.date}
+          />
         );
-      }
-      info = (
-        <OuterContainer>
-          <CreateNoteHolder>
-            <CreateNote color={"#e2f3f5"} click={this.openCreatePageHandler} />
-          </CreateNoteHolder>
-          <InnerContainer>
-            <Inside>{singleNote}</Inside>
-          </InnerContainer>
-        </OuterContainer>
+      });
+    } else {
+      loading = (
+        <h2 style={{ color: "salmon" }}>Please start adding some notes !</h2>
       );
     }
+    info = (
+      <OuterContainer>
+        <CreateNoteHolder>
+          <CreateNote color={"#e2f3f5"} click={this.openCreatePageHandler} />
+        </CreateNoteHolder>
+        <InnerContainer>
+          <Inside>{singleNote}</Inside>
+        </InnerContainer>
+      </OuterContainer>
+    );
     if (this.props.error) {
       info = null;
       loading = (
@@ -129,7 +129,7 @@ const mapStateToProps = (state) => {
     listOfNotes: state.note.notesList,
     error: state.note.error,
     isAuth: state.auth.isAuth,
-    userId : state.auth.idUser,
+    userId: state.auth.idUser,
   };
 };
 

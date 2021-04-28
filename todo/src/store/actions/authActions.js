@@ -77,7 +77,7 @@ export const auth = (name, email, password, isSignUp) => {
 
 const createProfileInDB = (name, email, password, userId) => {
   const url =
-    "https://todo-1ecae-default-rtdb.firebaseio.com/users/" + userId + ".json";
+    "https://todo-1ecae-default-rtdb.firebaseio.com/users/" + userId + "/info.json";
   const data = {
     name: name,
     email: email,
