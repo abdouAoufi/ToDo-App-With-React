@@ -84,7 +84,7 @@ class CreateNotePage extends Component {
       body: this.state.BODY,
       date: date,
     };
-    this.props.onAddNote(info);
+    this.props.onAddNote(info , this.props.userId);
     this.setState({ TITLE: "", BODY: "", saveNote: true });
   };
 
@@ -179,12 +179,13 @@ const mapStateToProps = (state) => {
   return {
     targetNote: state.note.clickedNote,
     loading: state.note.loading,
+    userId : state.auth.idUser ,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddNote: (note) => dispatch(actions.addNote(note)),
+    onAddNote: (note , userId) => dispatch(actions.addNote(note , userId)),
   };
 };
 

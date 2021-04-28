@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Loading from "../UI/Loading/Loading";
 import "./NoteDisplayer.css";
+import {Redirect} from "react-router-dom"
 import Backdrop from "../UI/Backdrop/Backdrop";
 import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import { connect } from "react-redux";
@@ -14,6 +15,9 @@ class NoteDisplayer extends Component {
     note : null
   };
 
+  componentDidMount = () => {
+   
+  }
 
   onClickBackDrop = () => {
     this.props.history.replace("/");
@@ -30,9 +34,10 @@ class NoteDisplayer extends Component {
     );
     return (
       <Backdrop
-        show={this.state.showBackdrop}
-        click={this.onClickBackDrop}
+      show={this.state.showBackdrop}
+      click={this.onClickBackDrop}
       >
+        {! this.props.isAuth ? <Redirect to="/" /> : null}
         {notePage}
       </Backdrop>
     );
@@ -41,7 +46,7 @@ class NoteDisplayer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    targetNote: state.clickedNote,
+    isAuth : state.auth.isAuth 
   };
 };
 

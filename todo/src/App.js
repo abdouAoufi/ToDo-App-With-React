@@ -42,6 +42,8 @@ class App extends Component {
   };
 
   render() {
+ 
+
     return (
       <Router>
         {this.state.login ? (
@@ -75,3 +77,5 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(App);
+
+const Container = styled.div``;

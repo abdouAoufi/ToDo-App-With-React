@@ -22,8 +22,8 @@ class home extends Component {
   expires = null;
 
   componentDidMount() {
-    this.props.getNotes();
     this.checkLocalPath();
+    this.props.getNotes(this.props.userId);
   }
 
   checkLocalPath = () => {
@@ -34,11 +34,10 @@ class home extends Component {
     const timeValidity = new Date(this.expires);
     if (this.idToken) {
       if (new Date() < timeValidity) {
-        if (this.expires) {
-          this.props.onAuth(this.idToken, this.userId, this.email);
-        } else {
-          this.props.onLogOut();
-        }
+        this.props.onAuth(this.idToken, this.userId, this.email);
+     
+      } else {
+        this.props.onLogOut();
       }
     }
   };
@@ -65,13 +64,15 @@ class home extends Component {
   };
 
   render() {
+    console.log(this.props.userId);
     let singleNote = null;
     let info = null;
     let loading = <Loading style={{ margin: "auto" }} />;
     if (!this.props.loading) {
       loading = null;
-      if (this.state.list.length > 0) {
-        singleNote = this.state.list.reverse().map((note) => {
+      if (this.props.listOfNotes.length > 0) {
+        loading = null ;
+        singleNote = this.props.listOfNotes.reverse().map((note) => {
           return (
             <Note
               click={() => {
@@ -102,11 +103,13 @@ class home extends Component {
       );
     }
     if (this.props.error) {
-      info = null ;
-      loading = <Error message={this.props.error.message} pleaSeLogin={false} />;
+      info = null;
+      loading = (
+        <Error message={this.props.error.message} pleaSeLogin={false} />
+      );
     }
-    if(!this.props.isAuth){
-      info = null ;
+    if (!this.props.isAuth) {
+      info = null;
       loading = <Error message={"please login "} pleaSeLogin={true} />;
     }
 
@@ -125,13 +128,14 @@ const mapStateToProps = (state) => {
     targetNote: state.note.targetNote,
     listOfNotes: state.note.notesList,
     error: state.note.error,
-    isAuth : state.auth.isAuth ,
+    isAuth: state.auth.isAuth,
+    userId : state.auth.idUser,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getNotes: () => dispatch(getNotes()),
+    getNotes: (userId) => dispatch(getNotes(userId)),
     noteClicked: (id) => dispatch(setTargetNote(id)),
     onAuth: (idToken, idUser, email) =>
       dispatch(actions.authSuccess(idToken, idUser, email)),

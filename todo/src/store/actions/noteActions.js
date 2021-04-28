@@ -31,17 +31,23 @@ export const gettingNoteFail = (error) => {
   return (dispatch) =>
     dispatch({ type: actions.ADDING_NOTE_FAIL, error: error });
 };
-export const getNotes = () => {
+export const getNotes = (userId) => {
+  // console.log(userId)
   return (dispatch) => {
     dispatch(startGettingNotes());
+    const url =
+      "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
+      userId +
+      "/notes/.json";
     axios
-      .request("https://todo-1ecae-default-rtdb.firebaseio.com/notes.json")
+      .request(url)
       .then((response) => {
         let notes = [];
         for (let key in response.data) {
           notes.push({ id: key, data: response.data[key] });
         }
         dispatch(gettingNoteSuccess(notes));
+        console.log(response.data);
       })
       .catch((error) => {
         dispatch(gettingNoteFail(error));
@@ -49,17 +55,21 @@ export const getNotes = () => {
   };
 };
 
-
-export const addNote = (note) => {
-  return dispatch => {
+export const addNote = (note, userId) => {
+  return (dispatch) => {
     dispatch(startAddingNote());
+    const url =
+      "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
+      userId +
+      "/notes/.json";
     axios
-      .post("https://todo-1ecae-default-rtdb.firebaseio.com/notes.json", note)
+      .post(url, note)
       .then((response) => {
-        dispatch(addingNoteSuccess(note))
+        console.log(response.data);
+        dispatch(addingNoteSuccess(note));
       })
       .catch((error) => {
-        dispatch(addingNoteFail(error))
+        dispatch(addingNoteFail(error));
       });
-  }
-}
+  };
+};

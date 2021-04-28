@@ -115,7 +115,7 @@ const IconHolder = styled.div`
 const LinkHolder = styled.div`
    {
     a {
-      color: balck;
+      color: black;
       font-weight: 600;
       margin-right: 12px;
     }
