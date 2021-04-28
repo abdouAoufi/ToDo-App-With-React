@@ -3,8 +3,8 @@ import styled from "styled-components";
 import CreateNote from "./CreateNote/CreataNote";
 import Note from "./SingleNote/SingleNote";
 import axios from "axios";
-import Loading from "../../components/Loading/Loading";
-import Error from "../Error/Error";
+import Loading from "../../components/UI/Loading/Loading";
+import Error from "../../components/UI/Error/Error";
 import { connect } from "react-redux";
 import { setTargetNote, getNotes } from "../../store/actions/index";
 import * as actions from "../../store/actions/index";
@@ -78,7 +78,7 @@ class home extends Component {
                 this.clickedNoteHandler(note.id);
               }}
               key={note.id}
-              color={this.getRandomColor()}
+              color={"#feb062"}
               title={note.data.title.slice(0, 20)}
               content={note.data.body}
               date={note.data.date}
@@ -102,7 +102,12 @@ class home extends Component {
       );
     }
     if (this.props.error) {
-      loading = <h3 style={{ color: "red" }}>{this.props.error.message}</h3>;
+      info = null ;
+      loading = <Error message={this.props.error.message} pleaSeLogin={false} />;
+    }
+    if(!this.props.isAuth){
+      info = null ;
+      loading = <Error message={"please login "} pleaSeLogin={true} />;
     }
 
     return (
@@ -120,6 +125,7 @@ const mapStateToProps = (state) => {
     targetNote: state.note.targetNote,
     listOfNotes: state.note.notesList,
     error: state.note.error,
+    isAuth : state.auth.isAuth ,
   };
 };
 

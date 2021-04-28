@@ -1,12 +1,12 @@
 import "./App.css";
 import React, { Component } from "react";
 import styled from "styled-components";
-import Home from "./components/Home/Home";
-import Navbar from "./components/Navbar/Navbar";
-import Sidebar from "./components/SideBar/Sidebar";
-import Backdrop from "./components/Backdrop/Backdrop";
-import SignUp from "./components/SignUp/SignUp";
-import Logout from "./components/Logout/Logout";
+import Home from "./containers/Home/Home";
+import Navbar from "./components/UI/Navbar/Navbar";
+import Sidebar from "./components/UI/SideBar/Sidebar";
+import Backdrop from "./components/UI/Backdrop/Backdrop";
+import SignUp from "./containers/Auth/SignUp/SignUp";
+import Logout from "./containers/Auth/Logout/Logout";
 import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -14,7 +14,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import Login from "./components/Login/Login";
+import Login from "./containers/Auth/Login/Login";
 import NoteDisplayer from "./components/NoteDisplayer/NoteDisplayer";
 
 class App extends Component {
@@ -42,11 +42,10 @@ class App extends Component {
   };
 
   render() {
-
     return (
       <Router>
         {this.state.login ? (
-          <Container>
+          <div>
             <Backdrop
               show={this.state.openBackDrop}
               click={this.clickToggleHandler}
@@ -61,7 +60,7 @@ class App extends Component {
               <Route path="/logout" component={Logout} />
               <Redirect to="/" />
             </Switch>
-          </Container>
+          </div>
         ) : (
           <Login click={this.loginClicked} />
         )}
@@ -76,7 +75,3 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(App);
-
-const Container = styled.div`
-  background-color: #fff;
-`;

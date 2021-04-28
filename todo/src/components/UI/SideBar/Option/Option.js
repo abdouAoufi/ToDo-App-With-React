@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import note from "../../../assets/post-it.png";
+// import note from "../../../assets/post-it.png";
 
  const option = ({ icon, name }) => {
   return (

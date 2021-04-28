@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Loading from "../Loading/Loading";
+import Loading from "../UI/Loading/Loading";
 import "./NoteDisplayer.css";
-import Backdrop from "../Backdrop/Backdrop";
+import Backdrop from "../UI/Backdrop/Backdrop";
 import CreateNotePage from "../CreateNotePage/CreateNotePage";
 import { connect } from "react-redux";
 class NoteDisplayer extends Component {

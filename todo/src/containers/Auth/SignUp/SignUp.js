@@ -2,8 +2,8 @@ import React from "react";
 import "./SignUp.css";
 import Form from "./Form/Form";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/index";
-import Loading from "../Loading/Loading";
+import * as actions from "../../../store/actions/index";
+import Loading from "../../../components/UI/Loading/Loading";
 import { Redirect } from "react-router-dom";
 
 class LoginForm extends React.Component {

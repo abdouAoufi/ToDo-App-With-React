@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Option from "./Option/Option";
-import note from "../../assets/post-it.png";
-import reminder from "../../assets/reminder.png";
-import tag from "../../assets/tag.png";
-import todo from "../../assets/to-do-list.png";
-import trash from '../../assets/rubbish-bin.png'
-import logo from "../../assets/logo.png"
+import note from "../../../assets/post-it.png";
+import reminder from "../../../assets/reminder.png";
+import tag from "../../../assets/tag.png";
+import todo from "../../../assets/to-do-list.png";
+import trash from '../../../assets/rubbish-bin.png'
+import logo from "../../../assets/logo.png"
 
 const Sidebar = (props) => {
   const options = [

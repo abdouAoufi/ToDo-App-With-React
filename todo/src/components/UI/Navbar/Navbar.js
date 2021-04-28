@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/logo.png";
-import menu from "../../assets/menu.png";
+import logo from "../../../assets/logo.png";
+import menu from "../../../assets/menu.png";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link as RouterLink } from "react-router-dom";
 import { connect } from "react-redux";
@@ -20,18 +20,18 @@ class Navbar extends React.Component {
                 <Logo src={logo} />
               </RouterLink>
             </div>
-            <SearchContainer>
-              <SearchInpuBar
-                type="text"
-                placeholder="Search for notes to-do's ..."
-              />
-              <IconHolder>
-                <SearchIcon />
-              </IconHolder>
-            </SearchContainer>
+            {this.props.isAuth ? (
+              <SearchContainer>
+                <SearchInpuBar
+                  type="text"
+                  placeholder="Search for notes to-do's ..."
+                />
+                <IconHolder>
+                  <SearchIcon />
+                </IconHolder>
+              </SearchContainer>
+            ) : null}
             <LinkHolder>
-              {/* <Link href="/">Get started</Link>
-              <Link href="/"> features</Link> */}
               {this.props.isAuth ? (
                 <RouterLink to="/logout">Log out</RouterLink>
               ) : (
@@ -95,6 +95,7 @@ const SearchInpuBar = styled.input`
   padding-left: 8px;
   font-size: 1rem;
   outline: none;
+  border-radius : 3px;
   :selection {
     outline: none;
   }
@@ -105,18 +106,21 @@ const IconHolder = styled.div`
   display: grid;
   place-items: center;
   height: 100%;
+  cursor:pointer;
   :hover {
-    background-color: #eee;
+    background-color: #c5e3f6;
   }
 `;
 
-const LinkHolder = styled.div`{
-  a {
-    color : balck;
-    font-weight : 600;
-    margin-right : 12px;
+const LinkHolder = styled.div`
+   {
+    a {
+      color: balck;
+      font-weight: 600;
+      margin-right: 12px;
+    }
   }
-}`;
+`;
 
 const Link = styled.a`
   text-decoration: none;

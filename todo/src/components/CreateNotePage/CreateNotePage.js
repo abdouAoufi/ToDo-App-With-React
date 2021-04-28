@@ -7,7 +7,7 @@ import CancelButton from "@material-ui/core/Button";
 import axios from "axios";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
-import Loading from "../Loading/Loading";
+import Loading from "../UI/Loading/Loading";
 
 class CreateNotePage extends Component {
   state = {
