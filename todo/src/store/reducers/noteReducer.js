@@ -26,14 +26,14 @@ const startGettingNote = (state) => {
 };
 
 const gettingNoteSuccess = (state, action) => {
-  return updateObject(state, { notesList: action.notes , loading : false});
+  return updateObject(state, { notesList: action.notes, loading: false });
 };
 
 const gettingNotesFail = (state, action) => {
   return updateObject(state, { loading: false, error: action.error });
 };
 
-export const reducer = (state = initialState, action) => {
+const noteReducer = (state = initialState, action) => {
   switch (action.type) {
     case actions.START_GETTING_NOTE:
       return startGettingNote(state);
@@ -68,3 +68,6 @@ export const reducer = (state = initialState, action) => {
       return state;
   }
 };
+
+
+export default noteReducer ;

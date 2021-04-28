@@ -1,5 +1,5 @@
 import React from "react";
-// import "./SignUp.css";
+import "./SignUp.css";
 import Form from "./Form/Form";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
@@ -7,9 +7,9 @@ import Loading from "../Loading/Loading";
 import { Redirect } from "react-router-dom";
 
 class LoginForm extends React.Component {
-  clickDoneHandler = (name, email, password) => {
+  clickDoneHandler = (name , email, password) => {
     console.log(email, password);
-    this.props.onAuth(name, email, password, false);
+    this.props.onAuth(name,email, password, true);
   };
 
   render() {
@@ -17,7 +17,7 @@ class LoginForm extends React.Component {
     console.log(this.props.isAuth);
     let content = (
       <div id="signupform">
-        <h2 id="headerTitleSignUp">Login</h2>
+        <h2 id="headerTitleSignUp">Sign up</h2>
         {this.props.authFail ? (
           <h3 style={{ color: "red", textAlign: "center" }}>
             {this.props.message}
@@ -52,8 +52,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (name, email, password, isSignUp) =>
-      dispatch(actions.auth(name, email, password, isSignUp)),
+    onAuth: (name , email, password, isSignUp) =>
+      dispatch(actions.auth(name ,email, password, isSignUp , )),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

@@ -7,6 +7,7 @@ import Loading from "../../components/Loading/Loading";
 import Error from "../Error/Error";
 import { connect } from "react-redux";
 import { setTargetNote, getNotes } from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 
 class home extends Component {
   state = {
@@ -15,9 +16,32 @@ class home extends Component {
     loading: true,
   };
 
+  email = null;
+  idToken = null;
+  userId = null;
+  expires = null;
+
   componentDidMount() {
     this.props.getNotes();
+    this.checkLocalPath();
   }
+
+  checkLocalPath = () => {
+    this.idToken = localStorage.getItem("idToken");
+    this.userId = localStorage.getItem("userId");
+    this.email = localStorage.getItem("email");
+    this.expires = localStorage.getItem("expires");
+    const timeValidity = new Date(this.expires);
+    if (this.idToken) {
+      if (new Date() < timeValidity) {
+        if (this.expires) {
+          this.props.onAuth(this.idToken, this.userId, this.email);
+        } else {
+          this.props.onLogOut();
+        }
+      }
+    }
+  };
 
   static getDerivedStateFromProps(props, state) {
     return { list: props.listOfNotes, loading: false };
@@ -92,10 +116,10 @@ class home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.loading,
-    targetNote: state.targetNote,
-    listOfNotes: state.notesList,
-    error: state.error,
+    loading: state.note.loading,
+    targetNote: state.note.targetNote,
+    listOfNotes: state.note.notesList,
+    error: state.note.error,
   };
 };
 
@@ -103,6 +127,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getNotes: () => dispatch(getNotes()),
     noteClicked: (id) => dispatch(setTargetNote(id)),
+    onAuth: (idToken, idUser, email) =>
+      dispatch(actions.authSuccess(idToken, idUser, email)),
+    onLogOut: () => dispatch(actions.logOut()),
   };
 };
 

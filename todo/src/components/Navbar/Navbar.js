@@ -4,41 +4,56 @@ import logo from "../../assets/logo.png";
 import menu from "../../assets/menu.png";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link as RouterLink } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Navbar = ({ clickToggle }) => {
-  return (
-    <header>
-      <Container>
-        <InnerContainer>
-          <div>
-            <Element href="">
-              <Logo src={menu} onClick={clickToggle} />
-            </Element>
-            <RouterLink to="/">
-              <Logo src={logo} />
-            </RouterLink>
-          </div>
-          <SearchContainer>
-            <SearchInpuBar
-              type="text"
-              placeholder="Search for notes to-do's ..."
-            />
-            <IconHolder>
-              <SearchIcon />
-            </IconHolder>
-          </SearchContainer>
-          <LinkHolder>
-            <Link href="/">Get started</Link>
-            <Link href="/"> features</Link>
-            <RouterLink to="/login">Log out</RouterLink>
-          </LinkHolder>
-        </InnerContainer>
-      </Container>
-    </header>
-  );
+class Navbar extends React.Component {
+  render() {
+    return (
+      <header>
+        <Container>
+          <InnerContainer>
+            <div>
+              <Element href="">
+                <Logo src={menu} onClick={this.props.clickToggle} />
+              </Element>
+              <RouterLink to="/">
+                <Logo src={logo} />
+              </RouterLink>
+            </div>
+            <SearchContainer>
+              <SearchInpuBar
+                type="text"
+                placeholder="Search for notes to-do's ..."
+              />
+              <IconHolder>
+                <SearchIcon />
+              </IconHolder>
+            </SearchContainer>
+            <LinkHolder>
+              {/* <Link href="/">Get started</Link>
+              <Link href="/"> features</Link> */}
+              {this.props.isAuth ? (
+                <RouterLink to="/logout">Log out</RouterLink>
+              ) : (
+                <div style={{ display: "inline" }}>
+                  <RouterLink to="/signup">Sign Up</RouterLink>
+                  <RouterLink to="/login">Login</RouterLink>
+                </div>
+              )}
+            </LinkHolder>
+          </InnerContainer>
+        </Container>
+      </header>
+    );
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    isAuth: state.auth.isAuth,
+  };
 };
 
-export default Navbar;
+export default connect(mapStateToProps)(Navbar);
 
 const Container = styled.nav`
   width: 100%;
@@ -95,7 +110,13 @@ const IconHolder = styled.div`
   }
 `;
 
-const LinkHolder = styled.div``;
+const LinkHolder = styled.div`{
+  a {
+    color : balck;
+    font-weight : 600;
+    margin-right : 12px;
+  }
+}`;
 
 const Link = styled.a`
   text-decoration: none;

@@ -3,13 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createStore, applyMiddleware, compose } from "redux";
-import { reducer } from "./store/reducers/reducer";
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import noteReducer from "./store/reducers/noteReducer";
+import authReducer from "./store/reducers/authReducer";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 
 // const store = createStore(reducer , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
+const reducer = combineReducers({ note: noteReducer, auth: authReducer });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducer,

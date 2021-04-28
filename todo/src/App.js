@@ -5,15 +5,17 @@ import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/SideBar/Sidebar";
 import Backdrop from "./components/Backdrop/Backdrop";
-import CreateNote from "./components/CreateNotePage/CreateNotePage"
+import SignUp from "./components/SignUp/SignUp";
+import Logout from "./components/Logout/Logout";
+import { connect } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
-import Login from "./components/Login/Loginn";
+import Login from "./components/Login/Login";
 import NoteDisplayer from "./components/NoteDisplayer/NoteDisplayer";
-
 
 class App extends Component {
   state = {
@@ -40,6 +42,7 @@ class App extends Component {
   };
 
   render() {
+
     return (
       <Router>
         {this.state.login ? (
@@ -52,20 +55,27 @@ class App extends Component {
             <Sidebar open={this.state.openSideBar} />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route  path="/note" component={NoteDisplayer} />
-              <Route path="/login" component={Login}/>
+              <Route path="/note" component={NoteDisplayer} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/logout" component={Logout} />
+              <Redirect to="/" />
             </Switch>
           </Container>
         ) : (
           <Login click={this.loginClicked} />
         )}
       </Router>
-
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isAuth: state.auth.isAuth,
+  };
+};
+export default connect(mapStateToProps)(App);
 
 const Container = styled.div`
   background-color: #fff;

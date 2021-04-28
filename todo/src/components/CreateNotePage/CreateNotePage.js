@@ -177,8 +177,8 @@ class CreateNotePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    targetNote: state.clickedNote,
-    loading: state.loading,
+    targetNote: state.note.clickedNote,
+    loading: state.note.loading,
   };
 };
 

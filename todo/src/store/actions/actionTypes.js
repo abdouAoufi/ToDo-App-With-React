@@ -8,3 +8,8 @@ export const GETNOTES_SUCCESS = "GET_NOTES_SUCCESS"
 export const START_GETTING_NOTE = "START_GETTING_NOTE"
 export const GETTING_NOTE_FAIL = "GETTING_NOTE_FAIL"
 
+export const AUTH_START = 'AUTH_START';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAIL = 'AUTH_FAIL';
+export const LOG_OUT = "LOG_OUT"
+
