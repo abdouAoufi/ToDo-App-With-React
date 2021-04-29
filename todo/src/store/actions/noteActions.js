@@ -29,9 +29,9 @@ export const gettingNoteSuccess = (notes) => {
 
 export const gettingNoteFail = (error) => {
   return (dispatch) =>
-    dispatch({ type: actions.ADDING_NOTE_FAIL, error: error });
+    dispatch({ type: actions.GETTING_NOTE_FAIL, error: error });
 };
-export const getNotes = (userId) => {
+export const getNotes = (userId , idToken) => {
   console.log(userId)
   return (dispatch) => {
     dispatch(startGettingNotes());
@@ -39,8 +39,9 @@ export const getNotes = (userId) => {
       "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
       userId +
       "/notes/.json";
+      console.log(url);
     axios
-      .request(url)
+      .get(url)
       .then((response) => {
         let notes = [];
         for (let key in response.data) {

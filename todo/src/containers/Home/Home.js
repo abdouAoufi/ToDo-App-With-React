@@ -36,8 +36,9 @@ class home extends Component {
       this.setState({ idToken, userId, email, expires });
       const timeValidity = new Date(expires);
       if (new Date() < timeValidity) {
+        console.log(this.state.userId , this.state.idToken);
         this.props.onAuth(this.state.idToken, this.state.userId, this.state.email);
-        this.props.getNotes(this.state.userId);
+        this.props.getNotes(this.props.userId , this.props.idToken);
       } else {
         this.props.onLogOut();
       }
@@ -130,12 +131,13 @@ const mapStateToProps = (state) => {
     error: state.note.error,
     isAuth: state.auth.isAuth,
     userId: state.auth.idUser,
+    idToken  :state.auth.idToken,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getNotes: (userId) => dispatch(getNotes(userId)),
+    getNotes: (userId , idToken) => dispatch(getNotes(userId , idToken)),
     noteClicked: (id) => dispatch(setTargetNote(id)),
     onAuth: (idToken, idUser, email) =>
       dispatch(actions.authSuccess(idToken, idUser, email)),
