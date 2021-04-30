@@ -3,7 +3,8 @@ import { FormInput } from "./FormInput";
 import { FormButton } from "./FormButton";
 import { Link } from "react-router-dom";
 
-class Form extends React.Component {
+class 
+Form extends React.Component {
   state = {
     name: "",
     email: "",

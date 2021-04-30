@@ -13,8 +13,11 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    let home = <Redirect to="/" />;
-    console.log(this.props.isAuth);
+   console.log(this.props.isAuth)
+    let home = null;
+    if (this.props.isAuth) {
+      home = <Redirect to="/" />;
+    }
     let content = (
       <div id="signupform">
         <h2 id="headerTitleSignUp">Login</h2>
@@ -23,6 +26,7 @@ class LoginForm extends React.Component {
             {this.props.message}
           </h3>
         ) : null}
+        {home}
         <Form
           click={this.props.click}
           clickDoneHandler={this.clickDoneHandler}

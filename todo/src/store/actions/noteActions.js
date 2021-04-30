@@ -32,23 +32,22 @@ export const gettingNoteFail = (error) => {
     dispatch({ type: actions.GETTING_NOTE_FAIL, error: error });
 };
 export const getNotes = (userId , idToken) => {
-  console.log(userId)
+  console.log("start getting note");
   return (dispatch) => {
     dispatch(startGettingNotes());
     const url =
       "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
       userId +
       "/notes/.json";
-      console.log(url);
+      const alternative = "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json"
     axios
-      .get(url)
+      .get(alternative)
       .then((response) => {
         let notes = [];
         for (let key in response.data) {
           notes.push({ id: key, data: response.data[key] });
         }
         dispatch(gettingNoteSuccess(notes));
-        console.log(response.data);
       })
       .catch((error) => {
         dispatch(gettingNoteFail(error));

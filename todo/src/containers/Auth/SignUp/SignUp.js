@@ -8,13 +8,11 @@ import { Redirect } from "react-router-dom";
 
 class LoginForm extends React.Component {
   clickDoneHandler = (name , email, password) => {
-    console.log(email, password);
     this.props.onAuth(name,email, password, true);
   };
 
   render() {
     let home = <Redirect to="/" />;
-    console.log(this.props.isAuth);
     let content = (
       <div id="signupform">
         <h2 id="headerTitleSignUp">Sign up</h2>

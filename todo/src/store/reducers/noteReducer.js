@@ -2,35 +2,37 @@ import * as actions from "../actions/actionTypes";
 import updateObject from "./utility";
 
 const initialState = {
-  notesList: [],
+  notesList: null,
   test: "test  value ",
   clickedNote: null,
   error: null,
   loading: null,
+  startAdding: false,
+  startGetting: false,
 };
 
 const startAddingNote = (state) => {
-  return updateObject(state, { loading: true });
+  return updateObject(state, { startAdding: true });
 };
 
 const addingNoteSuccess = (state) => {
-  return updateObject(state, { loading: false });
+  return updateObject(state, { startAdding: false });
 };
 
 const addingNoteFail = (state, action) => {
-  return updateObject(state, { loading: false, error: action.error });
+  return updateObject(state, { startAdding: false, error: action.error });
 };
 
 const startGettingNote = (state) => {
-  return updateObject(state, { loading: true });
+  return updateObject(state, { startGetting: true });
 };
 
 const gettingNoteSuccess = (state, action) => {
-  return updateObject(state, { notesList: action.notes, loading: false });
+  return updateObject(state, { notesList: action.notes, startGetting: false });
 };
 
 const gettingNotesFail = (state, action) => {
-  return updateObject(state, { loading: false, error: action.error });
+  return updateObject(state, { startGetting: false, error: action.error });
 };
 
 const noteReducer = (state = initialState, action) => {
@@ -69,5 +71,4 @@ const noteReducer = (state = initialState, action) => {
   }
 };
 
-
-export default noteReducer ;
+export default noteReducer;

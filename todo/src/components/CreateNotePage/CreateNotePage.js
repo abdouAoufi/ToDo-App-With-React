@@ -1,59 +1,50 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import Button from "../MaterialButton/Materialbutton";
-import TextField from "@material-ui/core/TextField";
-import pin from "../../assets/push-pin.png";
-import CancelButton from "@material-ui/core/Button";
+
 import axios from "axios";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Loading from "../UI/Loading/Loading";
+import NotificationsNone from "@material-ui/icons/NotificationsNone";
+import PersonAdd from "@material-ui/icons/PersonAdd";
+import Palette from "@material-ui/icons/Palette";
+import Image from "@material-ui/icons/Image";
+import SystemUpdateAlt from "@material-ui/icons/SystemUpdateAlt";
+import MoreVert from "@material-ui/icons/MoreVert";
+import Undo from "@material-ui/icons/Undo";
+import Redo from "@material-ui/icons/Redo";
+import { Redirect } from "react-router-dom";
 
 class CreateNotePage extends Component {
   state = {
-    TITLE: "",
-    BODY: "",
-    DATE: null,
-    ID: null,
-    note: null,
-    display: false,
-    saveNote: false,
+    note: {
+      title: "",
+      body: "",
+    },
+    saved: false,
   };
 
-  getFullTime = () => {
-    this.currentDate = new Date();
-    let cDay = this.checkLength(this.currentDate.getDate());
-    let cMonth = this.checkLength(this.currentDate.getMonth() + 1);
-    let cYear = this.currentDate.getFullYear();
-    let time =
-      this.checkLength(this.currentDate.getHours()) +
-      ":" +
-      this.checkLength(this.currentDate.getMinutes());
-    const fullTime = cDay + "-" + cMonth + "-" + cYear + " " + time;
-    return fullTime;
-  };
-
-  componentDidMount() {
-    if (this.props.targetNote) {
-      this.setState({
-        TITLE: this.props.targetNote.data.title,
-        BODY: this.props.targetNote.data.body,
-        display: true,
+  onValueChanged = (e, identifier) => {
+    if (identifier === "title") {
+      let updated = {
+        ...this.state.note,
+        title: e.target.value,
+      };
+      this.setState((prevState) => {
+        return {
+          note: updated,
+        };
       });
     } else {
-      console.log("that means create ");
+      let updated = {
+        ...this.state.note,
+        body: e.target.value,
+      };
+      this.setState((prevState) => {
+        return {
+          note: updated,
+        };
+      });
     }
-  }
-
-  checkLength = (number) => {
-    return number < 10 ? "0" + number : number;
-  };
-
-  getTitle = (event) => {
-    this.setState({ TITLE: event.target.value });
-  };
-  getBody = (event) => {
-    this.setState({ BODY: event.target.value });
   };
 
   getRandomData = () => {
@@ -76,101 +67,71 @@ class CreateNotePage extends Component {
       });
   };
 
-  clickDone = (e) => {
-    const date = this.getFullTime();
-    e.preventDefault();
-    const info = {
-      title: this.state.TITLE,
-      body: this.state.BODY,
-      date: date,
-    };
-    this.props.onAddNote(info , this.props.userId);
-    this.setState({ TITLE: "", BODY: "", saveNote: true });
-  };
-
-  postNoteToServer = (note) => {
+  postNoteToServer = () => {
+    const url = "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json";
     axios
-      .post("https://todo-1ecae-default-rtdb.firebaseio.com/notes.json", note)
-      .then((response) => {})
+      .post(url, this.state.note)
+      .then((response) => {
+        console.log(response.data);
+        this.setState((prevState) => {
+          return {
+            saved: true,
+          };
+        });
+      })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  closeClickedHandler = () => {
+    this.postNoteToServer();
+  };
+
   render() {
-    this.title = (
-      <Title
-        value={this.state.TITLE}
-        placeholder="Title"
-        onChange={this.getTitle}
-      />
-    );
-    let loading = null;
-    let content = (
-      <InnerContainer>
-        <TopParent>
-          {this.title}
-          <Fixed src={pin} />
-        </TopParent>
-        <MiddleParent>
-          <TextField
-            style={{ width: "100%", fontSize: "1rem", border: "none" }}
-            id="standard-multiline-static"
-            label="Write your note here "
-            multiline
-            type="text"
-            value={this.state.BODY}
-            rows={16}
-            onChange={this.getBody}
-          />
-        </MiddleParent>
-        <BottomParent
-          style={{ display: !this.state.display ? "flex" : "none" }}
-        >
-          <div>
-            <CancelButton
-              onClick={this.props.clickCancel}
-              style={{ marginRight: "16px" }}
-              variant="contained"
-            >
-              Cancel
-            </CancelButton>
-
-            <CancelButton
-              onClick={this.getRandomData}
-              style={{ marginRight: "16px" }}
-              variant="contained"
-            >
-              Random
-            </CancelButton>
-
-            <Button
-              click={this.clickDone}
-              name="done"
-              type="contained"
-              color="primary"
-            />
-          </div>
-        </BottomParent>
-      </InnerContainer>
-    );
-    if (this.props.loading && this.state.saveNote) {
-      loading = <Loading />;
-      content = null ;
-    } else if (this.state.saveNote){
-      loading = null;
-      this.props.history.push("/")
-    }
-
     return (
-      <Container
+      <div
         onClick={(e) => {
           e.stopPropagation();
         }}
+        className="  m-4 bg-white shadow-md   p-4 rounded-xl"
       >
-        {loading}
-        {content}
-      </Container>
+        <div>
+          <input
+            onChange={(e) => this.onValueChanged(e, "title")}
+            value={this.state.title}
+            type="text"
+            placeholder="Title"
+            className=" outline-none text-gray-600 text-lg pl-2 font-semibold mb-8   w-full"
+          />
+          <input
+            onChange={(e) => this.onValueChanged(e, "body")}
+            value={this.state.body}
+            type="text"
+            placeholder="Take a note"
+            className="outline-none text-gray-400 text-lg  pl-2 font-normal mb-12 w-full"
+          />
+          <div className="block justify-between items-center sm:flex">
+            <div className="flex justify-between">
+              <NotificationsNone className="mr-6 text-gray-400 cursor-pointer hover:text-gray-600  " />
+              <PersonAdd className="mr-6 text-gray-400  hover:text-gray-600  cursor-pointer" />
+              <Palette className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
+              <Image className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
+              <SystemUpdateAlt className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
+              <MoreVert className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
+              <Undo className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
+              <Redo className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer lg:mr-32" />
+            </div>
+            <div
+              className="font-normal text-lg  text-gray-600 px-6 rounded py-1  cursor-pointer float-right hover:bg-gray-100 "
+              onClick={this.closeClickedHandler}
+            >
+              Close
+            </div>
+          </div>
+        </div>
+        {this.state.saved ? <Redirect to="/home" /> : null}
+      </div>
     );
   }
 }
@@ -179,66 +140,14 @@ const mapStateToProps = (state) => {
   return {
     targetNote: state.note.clickedNote,
     loading: state.note.loading,
-    userId : state.auth.idUser ,
+    userId: state.auth.idUser,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddNote: (note , userId) => dispatch(actions.addNote(note , userId)),
+    onAddNote: (note, userId) => dispatch(actions.addNote(note, userId)),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateNotePage);
-
-const Container = styled.div`
-  box-sizing: border-box;
-  margin-top: 50px;
-  z-index: 300;
-  width: auto;
-  height: auto;
-  padding : 1rem ;
-  background-color: white;
-  border-radius: 3px;
-  z-index: 200;
-  display : grid ;
-  place-items : center;
-`;
-
-const InnerContainer = styled.div`
-  margin: 25px;
-  height: 90%;
-  width : 430px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const TopParent = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-const Title = styled.input`
-  border: none;
-  height: 45px;
-  width: 80%;
-  font-size: 1.1rem;
-  font-weight: 500;
-
-  outline: none;
-`;
-const Fixed = styled.img`
-  height: 25px;
-  margin: 6px;
-  cursor: pointer;
-`;
-
-const MiddleParent = styled.div`
-  width: 100%;
-`;
-
-const BottomParent = styled.div`
-  margin-top: 16px;
-  width: auto;
-  justify-content: flex-end;
-`;

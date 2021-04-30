@@ -70,14 +70,20 @@ export const auth = (name, email, password, isSignUp) => {
         }, expires * 1000);
       })
       .catch((error) => {
-        dispatch(authFail(error.response.data.error.message));
+        if (error.response) {
+          dispatch(authFail(error.response.data.error.message));
+        } else {
+          dispatch(authFail("Error network"));
+        }
       });
   };
 };
 
 const createProfileInDB = (name, email, password, userId) => {
   const url =
-    "https://todo-1ecae-default-rtdb.firebaseio.com/users/" + userId + "/info.json";
+    "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
+    userId +
+    "/info.json";
   const data = {
     name: name,
     email: email,
