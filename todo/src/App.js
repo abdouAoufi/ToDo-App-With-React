@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import * as actions from "./store/actions/index";
 import Loading from "./components/UI/Loading/Loading";
 
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -52,7 +51,6 @@ class App extends Component {
     this.checkLocalPath();
   }
 
-  
   checkLocalPath = () => {
     if (localStorage.getItem("idToken")) {
       const idToken = localStorage.getItem("idToken");
@@ -79,18 +77,21 @@ class App extends Component {
           />
           <Navbar clickToggle={this.clickToggleHandler} />
           <Sidebar open={this.state.openSideBar} />
-          {/* <Switch>
+          <Switch>
             <Route exact path="/loading" component={TemporaryArea} />
             <Route exact path="/home" component={Home} />
             <Route path="/note" component={NoteDisplayer} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
             <Route path="/logout" component={Logout} />
-            {this.props.isAuth ? <Redirect to="/loading" /> : <Redirect to="/login" />}
-          </Switch> */}
-          <NoteDisplayer />
+            {this.props.isAuth ? (
+              <Redirect to="/loading" />
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Switch> 
+          {/* <NoteDisplayer /> */}
         </div>
-      
       </Router>
     );
   }

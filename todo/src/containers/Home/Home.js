@@ -44,8 +44,8 @@ class home extends Component {
               this.clickedNoteHandler(note.id);
             }}
             key={note.id}
-            color={"#feb062"}
-            title={note.data.title.slice(0, 20)}
+            color={"#c5e3f6"}
+            title={note.data.title.slice(0, 10)}
             content={note.data.body}
             date={note.data.date}
           />

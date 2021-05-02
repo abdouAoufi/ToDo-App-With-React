@@ -20,24 +20,20 @@ class NoteDisplayer extends Component {
   }
 
   onClickBackDrop = () => {
-    this.props.history.replace("/home");
+    this.props.history.replace("/");
   }
 
   render() {
     let notePage = null;
     notePage = (
-      <CreateNotePage
-      // note={this.state.note}
-      // history={this.props.history}
-      // clickCancel={this.onClickBackDrop}
-      />
+      <CreateNotePage />
     );
     return (
       <Backdrop
       show={this.state.showBackdrop}
-      // click={this.onClickBackDrop}
+      click={this.onClickBackDrop}
       >
-        {! this.props.isAuth ? <Redirect to="/" /> : null}
+        {/* {! this.props.isAuth ? <Redirect to="/" /> : null} */}
         {notePage}
       </Backdrop>
     );
