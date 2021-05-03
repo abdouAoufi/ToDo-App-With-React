@@ -1,7 +1,7 @@
 import React from "react";
 import { FormInput } from "./FormInput";
 import { FormButton } from "./FormButton";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class 
 Form extends React.Component {
@@ -13,7 +13,13 @@ Form extends React.Component {
     emailValid: false,
     nameValid: false,
     passwordlValid: false,
+    redirect: false,
+
   };
+
+  login = () => {
+    this.setState({ redirect: true });
+  }
 
   onChangeNameHandler = (event) => {
     this.setState({ name: event.target.value });
@@ -82,6 +88,11 @@ Form extends React.Component {
             )
           }
         />
+        <FormButton
+          click={this.login}
+          title="Login"
+        />
+        {this.state.redirect ? <Redirect to="/login" /> : null}
         {/* </Link> */}
       </div>
     );

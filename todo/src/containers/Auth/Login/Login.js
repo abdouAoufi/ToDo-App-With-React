@@ -7,15 +7,10 @@ import * as actions from "../../../store/actions/index";
 import Loading from "../../../components/UI/Loading/Loading";
 import { Redirect } from "react-router-dom";
 
-const TYPE_NOTIFICATIONS = {
-  DANGER: "DANGER",
-  INFO: "INFO",
-  SUCCESS: "SUCCESS",
-};
+ 
 
 class LoginForm extends React.Component {
   state = {
-    
     error: false,
     loading: false,
     loadingSuccess: false,
@@ -38,7 +33,7 @@ class LoginForm extends React.Component {
       );
     } else if (this.props.isAuth) {
       this.props.displyaNot(
-        actions.TYPE_NOTIFICATIONS.DANGER,
+        actions.TYPE_NOTIFICATIONS.INFO,
         "Loggin succesfully",
          null ,
         true

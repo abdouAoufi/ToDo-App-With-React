@@ -33,7 +33,7 @@ class NoteDisplayer extends Component {
       show={this.state.showBackdrop}
       click={this.onClickBackDrop}
       >
-        {/* {! this.props.isAuth ? <Redirect to="/" /> : null} */}
+        {! this.props.isAuth ? <Redirect to="/" /> : null}
         {notePage}
       </Backdrop>
     );
