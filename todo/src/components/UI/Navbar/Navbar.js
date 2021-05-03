@@ -53,7 +53,7 @@ class Navbar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     isAuth: state.auth.isAuth,
-    profileName : state.auth.email
+    profileName : state.auth.eamil
   };
 };
 

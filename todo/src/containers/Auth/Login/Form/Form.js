@@ -1,7 +1,7 @@
 import React from "react";
 import { FormInput } from "../../SignUp/Form/FormInput";
 import { FormButton } from "../../SignUp/Form/FormButton";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 
 class Form extends React.Component {
@@ -13,6 +13,7 @@ class Form extends React.Component {
     emailValid: false,
     nameValid: false,
     passwordlValid: false,
+    redirect: false,
   };
 
   onChangeNameHandler = (event) => {
@@ -45,26 +46,27 @@ class Form extends React.Component {
   };
 
   checkProvider = () => {
-    const url = "https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=AIzaSyA2KjPUfoHd5xbWs7VT-7vyc89dM1B1vI8";
-    const data = {
-      identifier : this.state.email ,
-      continueUri : "http://localhost:8080/app"
-    }
-    axios
-      .post(url, data)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.setState({ redirect: true });
+    // const url = "https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=AIzaSyA2KjPUfoHd5xbWs7VT-7vyc89dM1B1vI8";
+    // const data = {
+    //   identifier : this.state.email ,
+    //   continueUri : "http://localhost:8080/app"
+    // }
+    // axios
+    //   .post(url, data)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   render() {
     return (
       <div>
-        <p style={{margin : "auto"}}>test@test.com</p>
-        <p style={{margin : "auto"}}>testtesttest</p>
+        <p style={{ margin: "auto" }}>test@test.com</p>
+        <p style={{ margin: "auto" }}>testtesttest</p>
         <FormInput
           description="Email"
           placeholder="Enter your email"
@@ -84,13 +86,14 @@ class Form extends React.Component {
           click={this.clickDoneHandler}
           title="Log in"
           disabled={!(this.state.emailValid && this.state.passwordlValid)}
-        />  
+        />
 
         <FormButton
           click={this.checkProvider}
-          title="Check "
+          title="Sign up "
           disabled={false}
         />
+        {this.state.redirect ? <Redirect to="/signup" /> : null}
         {/* </Link> */}
       </div>
     );
