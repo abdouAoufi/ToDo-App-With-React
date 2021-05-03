@@ -10,6 +10,8 @@ import Logout from "./containers/Auth/Logout/Logout";
 import { connect } from "react-redux";
 import * as actions from "./store/actions/index";
 import Loading from "./components/UI/Loading/Loading";
+import NotificationDanger from "./components/UI/Notificaitons/NotificationDanger/NotificationDanger";
+import NotificationInfo from "./components/UI/Notificaitons/NotificationInfo/NotificationInfo";
 
 import {
   BrowserRouter as Router,
@@ -68,9 +70,33 @@ class App extends Component {
   };
 
   render() {
+    let notification = null;
+    if (this.props.displayNotification) {
+      switch (this.props.typeNotification) {
+        case actions.TYPE_NOTIFICATIONS.DANGER:
+          notification = (
+            <NotificationDanger
+              WarTitle={this.props.titleNotification}
+              WarBody={this.props.bodyNotification}
+            />
+          );
+          break;
+        case actions.TYPE_NOTIFICATIONS.INFO:
+          notification = (
+            <NotificationInfo
+              InfoTitle={this.props.titleNotification}
+              success={this.props.notificationInfoSuccess}
+            />
+          );
+          break;
+        default:
+          notification = null;
+      }
+    }
     return (
       <Router>
         <div>
+          {notification}
           <Backdrop
             show={this.state.openBackDrop}
             click={this.clickToggleHandler}
@@ -89,7 +115,7 @@ class App extends Component {
             ) : (
               <Redirect to="/login" />
             )}
-          </Switch> 
+          </Switch>
           {/* <NoteDisplayer /> */}
         </div>
       </Router>
@@ -101,6 +127,12 @@ const mapStateToProps = (state) => {
   return {
     isAuth: state.auth.isAuth,
     notes: state.note.notesList,
+    displayNotification: state.note.displayNotification,
+    titleNotification: state.note.titleNotification,
+    bodyNotification: state.note.bodyNotification,
+    typeNotification: state.note.typeNotification,
+    notificationInfoSuccess : state.note.notificationInfoSuccess
+
   };
 };
 
@@ -110,6 +142,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.authSuccess(idToken, idUser, email)),
     onLogOut: () => dispatch(actions.logOut()),
     getNotes: () => dispatch(actions.getNotes()),
+    displyaNot: (type, title, body) =>
+      dispatch(actions.displayNotification(type, title, body)),
   };
 };
 

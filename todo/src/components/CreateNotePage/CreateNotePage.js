@@ -22,12 +22,8 @@ class CreateNotePage extends Component {
       body: null,
     },
     saved: false,
-    warTitle: "",
-    warBody: "",
     error: false,
-    success: false,
     loading: false,
-    titleInfo: "Savig your note please wait ....",
   };
 
   onValueChanged = (e, identifier) => {
@@ -54,96 +50,62 @@ class CreateNotePage extends Component {
     }
   };
 
-  getRandomData = () => {
-    this.setState({  note: { ...this.state.note, title: Math.floor(Math.random() * 10) , body : "body" } });
-    this.postNoteToServer();
-  };
-
-  postNoteToServer = () => {
-    this.displayNotification("info", "Saving your note ");
-    const url = "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json";
-    axios
-      .post(url, this.state.note)
-      .then((response) => {
-        this.displayNotification("infoSucess", "Note saved successfuly ");
-      })
-      .catch((error) => {
-        this.displayNotification(
-          "danger",
-          "Error network",
-          "Something baddly happend ... "
-        );
-      });
-  };
-
-  displayNotification = (type, title, body) => {
-    if (type === "danger") {
-      this.setState({
-        error: !this.state.error,
-        warTitle: title,
-        warBody: body,
-      });
-      setTimeout(() => {
-        this.setState({
-          error: !this.state.error,
-        });
-      }, 2500);
-    } else if (type === "infoSucess") {
-      this.setState({
-        loading: !this.state.loading,
-        titleInfo: title,
-        success: true,
-      });
-      setTimeout(() => {
-        this.setState({
-          loading: !this.state.loading,
-          success: false,
-          saved: true,
-        });
-      }, 3500);
-    } else {
-      this.setState({
-        loading: !this.state.loading,
-        titleInfo: title,
-      });
-      setTimeout(() => {
-        this.setState({
-          loading: !this.state.loading,
-        });
-      }, 2500);
-    }
-  };
-
   closeClickedHandler = () => {
-    if (this.state.note.body && this.state.note.title) {
-      console.log("we have data here  ");
-
+    if (this.state.note.title && this.state.note.body) {
       this.postNoteToServer();
     } else {
-      this.displayNotification(
-        "danger",
-        "No text",
-        "Please check your text ...."
+      this.props.displyaNot(
+        actions.TYPE_NOTIFICATIONS.DANGER,
+        "Error no text",
+        "Please check your text ",
+        false
       );
     }
   };
 
+  getRandomData = () => {
+    this.setState({
+      note: {
+        ...this.state.note,
+        title: Math.floor(Math.random() * 10),
+        body: "body",
+      },
+    });
+    this.postNoteToServer();
+  };
+
+  postNoteToServer = () => {
+    this.props.displyaNot(
+      actions.TYPE_NOTIFICATIONS.INFO,
+      "Saving ...  please wait ",
+      null,
+      false
+    );
+    const url = "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json";
+    axios
+      .post(url, this.state.note)
+      .then((response) => {
+        this.props.displyaNot(
+          actions.TYPE_NOTIFICATIONS.INFO,
+          "Note saved successfuly ",
+          null,
+          true
+        );
+        this.setState({ saved: true });
+      })
+
+      .catch((error) => {
+        this.props.displyaNot(
+          actions.TYPE_NOTIFICATIONS.DANGER,
+          "Error notwork",
+          "Ohh something went wrong ",
+          false
+        );
+      });
+  };
   render() {
     return (
       <div>
-        {this.state.error ? (
-          <Danger
-            display={this.state.error}
-            WarTitle={this.state.warTitle}
-            WarBody={this.state.warBody}
-          />
-        ) : this.state.loading ? (
-          <Info
-            success={this.state.success}
-            title={this.state.titleInfo}
-            WarBody={this.state.warBody}
-          />
-        ) : null}
         <div
           onClick={(e) => {
             e.stopPropagation();
@@ -167,28 +129,39 @@ class CreateNotePage extends Component {
             />
             <div className="block justify-between items-center sm:flex">
               <div className="flex justify-between">
-                <div >
-                  <NotificationsNone className="mr-6 text-gray-400 cursor-pointer hover:text-gray-600  " />
+                <div className="mr-4 lg:mr-6">
+                  <NotificationsNone className=" text-gray-400 cursor-pointer hover:text-gray-600  " />
                 </div>
-                <PersonAdd className="mr-6 text-gray-400  hover:text-gray-600  cursor-pointer" />
-                <Palette className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
-                <Image className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
-                <SystemUpdateAlt className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
-                <MoreVert className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
-                <Undo className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer" />
-                <Redo className="mr-6 text-gray-400 hover:text-gray-600  cursor-pointer lg:mr-32" />
+
+                <div className="mr-4 lg:mr-6">
+                  {" "}
+                  <PersonAdd className=" text-gray-400  hover:text-gray-600  cursor-pointer " />
+                </div>
+                <div className="mr-4 lg:mr-6 ">
+                  <Palette className="  text-gray-400 hover:text-gray-600  cursor-pointer" />
+                </div>
+                <div className="mr-4 lg:mr-6">
+                  <Image className="  text-gray-400 hover:text-gray-600  cursor-pointer" />
+                </div>
+                <div className="mr-4 lg:mr-6">
+                  <SystemUpdateAlt className="  text-gray-400 hover:text-gray-600  cursor-pointer" />
+                </div>
+                <div className="mr-4 lg:mr-6">
+                  <MoreVert className="  text-gray-400 hover:text-gray-600  cursor-pointer" />
+                </div>
+                <div className="mr-4 none lg:mr-6">
+                  <Undo className="  text-gray-400 hover:text-gray-600  cursor-pointer" />
+                </div>
+                <div className="mr-4 none lg:mr-32">
+                  <Redo className="  text-gray-400 hover:text-gray-600  cursor-pointer " />
+                </div>
               </div>
+
               <div
-                className="font-normal text-lg  text-gray-600 px-6 rounded py-1  cursor-pointer float-right hover:bg-gray-100 "
-                onClick={this.getRandomData}
-              >
-                RandomSave
-              </div>
-              <div
-                className="font-normal text-lg  text-gray-600 px-6 rounded py-1  cursor-pointer float-right hover:bg-gray-100 "
+                className="font-bold text-lg  text-gray-600 px-6 rounded py-1  cursor-pointer float-right hover:bg-gray-100 "
                 onClick={this.closeClickedHandler}
               >
-                Close
+                Save
               </div>
             </div>
           </div>
@@ -204,12 +177,19 @@ const mapStateToProps = (state) => {
     targetNote: state.note.clickedNote,
     loading: state.note.loading,
     userId: state.auth.idUser,
+    displayNotification: state.note.displayNotification,
+    titleNotification: state.note.titleNotification,
+    bodyNotification: state.note.bodyNotification,
+    typeNotification: state.note.typeNotification,
+    notificationInfoSuccess: state.note.notificationInfoSuccess,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onAddNote: (note, userId) => dispatch(actions.addNote(note, userId)),
+    displyaNot: (type, title, body, success) =>
+      dispatch(actions.displayNotification(type, title, body, success)),
   };
 };
 

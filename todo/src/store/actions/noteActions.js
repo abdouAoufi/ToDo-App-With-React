@@ -31,7 +31,7 @@ export const gettingNoteFail = (error) => {
   return (dispatch) =>
     dispatch({ type: actions.GETTING_NOTE_FAIL, error: error });
 };
-export const getNotes = (userId , idToken) => {
+export const getNotes = (userId, idToken) => {
   console.log("start getting note");
   return (dispatch) => {
     dispatch(startGettingNotes());
@@ -39,7 +39,8 @@ export const getNotes = (userId , idToken) => {
       "https://todo-1ecae-default-rtdb.firebaseio.com/users/" +
       userId +
       "/notes/.json";
-      const alternative = "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json"
+    const alternative =
+      "https://todo-1ecae-default-rtdb.firebaseio.com/notes.json";
     axios
       .get(alternative)
       .then((response) => {
@@ -72,4 +73,26 @@ export const addNote = (note, userId) => {
         dispatch(addingNoteFail(error));
       });
   };
+};
+
+export const displayNotification = (type, title, body , success) => {
+  return (dispatch) => {
+    dispatch({
+      type: actions.DISPLAY_NOTIFICATION,
+      typeNotification: type,
+      titleNotification: title,
+      bodyNotification: body,
+      notificationInfoSuccess : success
+    });
+    setTimeout(() => {
+      dispatch(hideNotification());
+    }, 2000);
+  };
+};
+
+export const hideNotification = () => {
+  return (dispatch) =>
+    dispatch({
+      type: actions.HIDE_NOTIFICATION,
+    });
 };

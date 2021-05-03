@@ -9,6 +9,11 @@ const initialState = {
   loading: null,
   startAdding: false,
   startGetting: false,
+  displayNotification: false,
+  typeNotification: null,
+  titleNotification: "",
+  bodyNotification: "",
+  notificationInfoSuccess: false,
 };
 
 const startAddingNote = (state) => {
@@ -35,6 +40,21 @@ const gettingNotesFail = (state, action) => {
   return updateObject(state, { startGetting: false, error: action.error });
 };
 
+const displayNotification = (state, action) => {
+  return updateObject(state, {
+    displayNotification: true,
+    titleNotification: action.titleNotification,
+    bodyNotification: action.bodyNotification,
+    typeNotification: action.typeNotification,
+    notificationInfoSuccess: action.notificationInfoSuccess,
+  });
+};
+
+const hideNotification = (state, action) => {
+  return updateObject(state, {
+    displayNotification: false,
+  });
+};
 const noteReducer = (state = initialState, action) => {
   switch (action.type) {
     case actions.START_GETTING_NOTE:
@@ -65,6 +85,12 @@ const noteReducer = (state = initialState, action) => {
 
     case actions.ADDING_NOTE_FAIL:
       return addingNoteFail(state, action);
+
+    case actions.DISPLAY_NOTIFICATION:
+      return displayNotification(state, action);
+
+    case actions.HIDE_NOTIFICATION:
+      return hideNotification(state, action);
 
     default:
       return state;

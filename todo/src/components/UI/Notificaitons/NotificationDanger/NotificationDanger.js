@@ -19,12 +19,13 @@ class Notificaion extends Component {
       "top-20",
       "right-10",
       "w-1/4",
+      "z-50"
     ]
 
     return (
       <div className={classes.join(" ")}>
         <div
-          className="bg-white border-l-4 border-orange-500 text-orange-700 p-4"
+          className= " shadow bg-white border-l-4 border-orange-500 text-orange-700 p-4"
           role="alert"
         >
           <p className="font-bold text-red-600">{this.props.WarTitle}</p>

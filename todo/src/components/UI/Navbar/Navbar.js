@@ -13,9 +13,9 @@ class Navbar extends React.Component {
         <Container>
           <InnerContainer>
             <div>
-              <Element href="">
+              {/* <Element href="">
                 <Logo src={menu} onClick={this.props.clickToggle} />
-              </Element>
+              </Element> */}
               <RouterLink to="/">
                 <Logo src={logo} />
               </RouterLink>
